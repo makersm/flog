@@ -1,11 +1,11 @@
-import {Header, Category} from '../components'
+import {Header, CategoryTab} from '../components'
 
 export default (props) => {
-    const {dirJsonTree, dirPath, url, children} = props
+    const {dirJsonTree, dirPath, children} = props
     return (
     <div>
         <Header name="MAKER BLOG TEMPLATE"/>
-        <Category dirJsonTree={dirJsonTree} dirPath={dirPath} url={url}/>
+        <CategoryTab dirJsonTree={dirJsonTree} dirPath={dirPath}/>
         {children}
     </div>
     )

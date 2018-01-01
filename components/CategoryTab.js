@@ -14,17 +14,17 @@ const InlineStyle = () => (
 	`}</style>
 )
 
-const Category = (props) => {
+const CategoryTab = (props) => {
     const {dirJsonTree, dirPath, url} = props
 
     return (
         <div className='Category'>
             <InlineStyle/>
             <SubHeader name='Category' style={{color: 'white'}}/>
-            <SearchBar/>
+                <SearchBar/>
             <ItemList dirJsonTree={dirJsonTree} dirPath={dirPath} url={url}/>
         </div>
     )
 }
 
-export default Category
+export default CategoryTab

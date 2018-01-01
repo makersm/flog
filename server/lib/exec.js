@@ -66,9 +66,10 @@ function getDirTree() {
 }
 
 function getURL() {
-    const datas = loadFile()
+    const configDir = path.join(__dirname, CONFIG_DIR.join('/'))
+    const contents = loadFile(configDir, 'config.json')
 
-    return datas['url']
+    return contents['url'].toString('utf-8')
 }
 
 module.exports = {

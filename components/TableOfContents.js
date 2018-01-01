@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import {SubHeader, FileList} from './index';
+import React, {Component} from 'react'
+import {SubHeader, ItemList} from './index'
 import {Sticky, Segment} from 'semantic-ui-react'
 
-const propTypes = {};
+const propTypes = {}
 
-const defaultProps = {};
+const defaultProps = {}
 
 const InlineStyle = () => (
     <style>{`
@@ -15,7 +15,7 @@ const InlineStyle = () => (
 class TableOfContents extends Component {
 
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -35,7 +35,7 @@ class TableOfContents extends Component {
     }
 }
 
-TableOfContents.propTypes = propTypes;
-TableOfContents.defaultProps = defaultProps;
+TableOfContents.propTypes = propTypes
+TableOfContents.defaultProps = defaultProps
 
-export default TableOfContents;
+export default TableOfContents

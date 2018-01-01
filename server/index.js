@@ -1,6 +1,6 @@
 const express = require('express')
 const next = require('next')
-const { getDirTree, getRootPath } = require('./lib/exec')
+const { getDirTree, getRootPath, getURL } = require('./lib/exec')
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
@@ -11,14 +11,19 @@ app.prepare()
 	const server = express()
 
 	server.get('*', (req, res) => {
-        const queryParams = { dirJsonTree: getDirTree(), dirPath: getRootPath(), url: getURL()}
-		app.render(req, res, req.originalUrl, queryParams)
+		if(req.get('http_x_requested_with')) {
+		    res.send({ dirJsonTree: getDirTree(), dirPath: getRootPath() })
+        } else {
+            const queryParams = {dirJsonTree: getDirTree(), dirPath: getRootPath()}
+            app.render(req, res, req.originalUrl, queryParams)
+        }
 	})
 
-    server.get('category', (req, res) => {
-        const queryParams = { dirJsonTree: getDirTree(), dirPath: getRootPath()}
-	    app.render(req, res, req.originalUrl, queryParams)
-    })
+    // server.get('category', (req, res) => {
+    //     console.log('get call')
+    //     const queryParams = { dirJsonTree: getDirTree(), dirPath: getRootPath()}
+	 //    app.render(req, res, req.originalUrl, queryParams)
+    // })
 
 	server.listen(3000, (err) => {
 		if (err) throw err

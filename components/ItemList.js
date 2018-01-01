@@ -5,7 +5,6 @@ import {Item} from './index'
 const propTypes = {
     dirJsonTree: PropTypes.array,
     dirPath: PropTypes.string,
-    url: PropTypes.string
 }
 
 

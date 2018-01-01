@@ -1,15 +1,13 @@
 import React, {Component} from 'react';
-import {WrapContainer} from '../containers'
 import Fonts from '../static/Fonts'
 import Page from '../layouts/main'
+import {Post} from '../components'
+import PostContainer from '../layouts/container'
 
 const InlineStyle = () => (
     <style>{`
 		body {
 			background: #E0E0E0;
-		}
-		.WrapContainer {
-			margin: 0 3rem 0 3rem;
 		}
 	`}</style>
 )
@@ -28,7 +26,9 @@ class Index extends Component {
         return (
             <Page dirJsonTree={dirJsonTree} dirPath={dirPath} url={url}>
                 <InlineStyle/>
-                <WrapContainer/>
+                <PostContainer>
+                    <Post/>
+                </PostContainer>
             </Page>
         )
     }

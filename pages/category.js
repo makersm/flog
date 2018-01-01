@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
-import {WrapContainer} from '../containers'
 import Fonts from '../static/Fonts'
 import Page from '../layouts/main'
+import PostListContainer from '../layouts/container'
+import axios from 'axios'
+import {PostList} from '../components'
 
 const InlineStyle = () => (
     <style>{`
 		body {
 			background: #E0E0E0;
-		}
-		.WrapContainer {
-			margin: 0 3rem 0 3rem;
 		}
 	`}</style>
 )
@@ -17,6 +16,9 @@ const InlineStyle = () => (
 class Category extends Component {
     constructor(props) {
         super(props)
+
+        if (this.props)
+            this.state = this.props
     }
 
     componentDidMount() {
@@ -24,18 +26,30 @@ class Category extends Component {
     }
 
     render() {
-        const {dirJsonTree, dirPath, url} = this.props
+        const {dirJsonTree, dirPath} = this.state
         return (
             <Page dirJsonTree={dirJsonTree} dirPath={dirPath}>
                 <InlineStyle/>
-                <WrapContainer/>
+                <PostListContainer>
+                    <PostList/>
+                </PostListContainer>
             </Page>
         )
     }
 }
 
 Category.getInitialProps = async function (context) {
-    return context.query
+    if(context.query['dirJsonTree'])
+        return context.query
+    else {
+        const config = {headers: {'http_x_requested_with': 'axios'}}
+        //TODO how to set url
+        const responseData = axios.get('http://localhost:3000', config)
+            .then((res) => {
+                return res.data
+            })
+        return responseData
+    }
 }
 
 export default Category;

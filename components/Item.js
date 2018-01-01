@@ -35,7 +35,7 @@ class Item extends Component {
         return (
             <div>
                 <InlineStyle/>
-                <Link prefetch href='/category'>
+                <Link prefetch href={{ pathname: '/category', query: { path: id }}} as={`/category`}>
                 <li onClick={ e => this.spread(id, e)}>
                     {name} <span className="count">[{count}]</span>
                     <span className="dropdown">{children}</span>
