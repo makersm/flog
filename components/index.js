@@ -1,23 +1,25 @@
-import Header from './Header'
-import CategoryTab from './CategoryTab'
-import Item from './Item'
-import ItemList from './ItemList'
-import SearchBar from './SearchBar'
-import SubHeader from './SubHeader'
-import Post from './Post'
-import TableOfContents from './TableOfContents'
-import Indicator from './Indicator'
-import PostList from './PostList'
+import Header from './accessories/Header'
+import CategoryTab from './category_tab/CategoryTab'
+import Dir from './category_tab/Dir'
+import DirList from './category_tab/DirList'
+import SearchBar from './category_tab/SearchBar'
+import SubHeader from './accessories/SubHeader'
+import Post from './post_main/Post'
+import TableOfContents from './post_main/TableOfContents'
+import Indicator from './category_main/Indicator'
+import PostNameList from './category_main/PostNameList'
+import PostName from './category_main/PostName'
 
 export {
     Header,
     CategoryTab,
-    Item,
-    ItemList,
+    Dir,
+    DirList,
     SearchBar,
     SubHeader,
     Post,
     TableOfContents,
     Indicator,
-    PostList
+    PostNameList,
+    PostName
 }

@@ -14,9 +14,9 @@ const InlineStyle = () => (
 )
 
 class Error extends React.Component {
-    static getInitialProps({res, err}) {
+    static getInitialProps({errorMsg, res, err}) {
         const statusCode = res ? res.statusCode : err ? err.statusCode : null;
-        return {statusCode}
+        return {statusCode, errorMsg}
     }
 
     componentDidMount() {
@@ -30,10 +30,11 @@ class Error extends React.Component {
                 <Header name="MAKER BLOG TEMPLATE"/>
                 <div className="display-center">
                     <Icon name="exclamation"/>
-                    <h1>
-                        {this.props.statusCode
-                            ? `An error ${this.props.statusCode} occurred on server. please try again later.`
-                            : 'An error occurred on client'}
+                    <h1>{this.props.errorMsg
+                        ? `${this.props.errorMsg}` : this.props.statusCode
+                        ? `An error ${this.props.statusCode} occurred on server. please try again later.`
+                        : 'An error occurred on client'}
+
                     </h1>
                 </div>
             </div>

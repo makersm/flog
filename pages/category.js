@@ -3,7 +3,8 @@ import Fonts from '../static/Fonts'
 import Page from '../layouts/main'
 import PostListContainer from '../layouts/container'
 import axios from 'axios'
-import {PostList} from '../components'
+import {PostNameList} from '../components'
+import Error from './_error'
 
 const InlineStyle = () => (
     <style>{`
@@ -26,12 +27,13 @@ class Category extends Component {
     }
 
     render() {
-        const {dirJsonTree, dirPath} = this.state
+        const {dirJsonTree, postNames, errorMsg} = this.state
+        if(errorMsg) return <Error errorMsg={this.state.errorMsg}/>
         return (
-            <Page dirJsonTree={dirJsonTree} dirPath={dirPath}>
+            <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
                 <PostListContainer>
-                    <PostList/>
+                    <PostNameList postNames={[1,2,3,4,5]}/>
                 </PostListContainer>
             </Page>
         )
@@ -39,15 +41,24 @@ class Category extends Component {
 }
 
 Category.getInitialProps = async function (context) {
-    if(context.query['dirJsonTree'])
+    if(context.query['dirJsonTree'] && context.query['dirJsonTree'][0])
         return context.query
     else {
         const config = {headers: {'http_x_requested_with': 'axios'}}
-        //TODO how to set url
-        const responseData = axios.get('http://localhost:3000', config)
-            .then((res) => {
-                return res.data
+
+        //TODO how to set url and basepath
+        const url = 'http://localhost:3000'
+        const pathName = context.pathname
+        const id = context.query.path
+        console.log(`${url}${pathName}${id}`)
+
+        const responseData = axios.get(`${url}${pathName}${id}`, config)
+            .then((response) => {return response.data})
+            .catch(err => {
+                console.error(err)
+                return {errorMsg: err}
             })
+
         return responseData
     }
 }

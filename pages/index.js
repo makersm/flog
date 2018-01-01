@@ -3,6 +3,8 @@ import Fonts from '../static/Fonts'
 import Page from '../layouts/main'
 import {Post} from '../components'
 import PostContainer from '../layouts/container'
+import axios from 'axios'
+import Error from './_error'
 
 const InlineStyle = () => (
     <style>{`
@@ -22,9 +24,10 @@ class Index extends Component {
     }
 
     render() {
-        const {dirJsonTree, dirPath, url} = this.props
+        const {dirJsonTree, errorMsg} = this.props
+        if(errorMsg) return <Error errorMsg={errorMsg}/>
         return (
-            <Page dirJsonTree={dirJsonTree} dirPath={dirPath} url={url}>
+            <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
                 <PostContainer>
                     <Post/>
@@ -35,7 +38,22 @@ class Index extends Component {
 }
 
 Index.getInitialProps = async function (context) {
-    return context.query
+    if(context.query['dirJsonTree'] && context.query['dirJsonTree'][0])
+        return context.query
+    else {
+        const config = {headers: {'http_x_requested_with': 'axios'}}
+        //TODO how to set url and basepath
+        const url = 'http://localhost:3000'
+
+        const responseData = axios.get(`${url}`, config)
+            .then((response) => {return response.data})
+            .catch(err => {
+                console.error(err)
+                return {errorMsg: err}
+            })
+
+        return responseData
+    }
 }
 
 export default Index;

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {SubHeader, ItemList} from './index'
+import {SubHeader, ItemList} from '../index'
 import {Sticky, Segment} from 'semantic-ui-react'
 
 const propTypes = {}

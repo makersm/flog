@@ -1,5 +1,5 @@
 import React from 'react'
-import {SearchBar, ItemList, SubHeader} from './index'
+import {SearchBar, DirList, SubHeader} from '../index'
 
 const InlineStyle = () => (
     <style>{`
@@ -15,14 +15,14 @@ const InlineStyle = () => (
 )
 
 const CategoryTab = (props) => {
-    const {dirJsonTree, dirPath, url} = props
+    const {dirJsonTree} = props
 
     return (
         <div className='Category'>
             <InlineStyle/>
             <SubHeader name='Category' style={{color: 'white'}}/>
                 <SearchBar/>
-            <ItemList dirJsonTree={dirJsonTree} dirPath={dirPath} url={url}/>
+            <DirList dirJsonTree={dirJsonTree}/>
         </div>
     )
 }

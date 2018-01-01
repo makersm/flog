@@ -1,14 +1,18 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {Item} from './index'
+import {Dir} from '../index'
 
 const propTypes = {
     dirJsonTree: PropTypes.array,
     dirPath: PropTypes.string,
 }
 
+const defaultProps = {
+    dirPath: ''
+}
 
-class ItemList extends Component {
+
+class DirList extends Component {
 
     constructor(props) {
         super(props)
@@ -19,20 +23,20 @@ class ItemList extends Component {
             if (dir.contents.length !== 0) {
                 return (
                     <div key={path + '/' + dir.name}>
-                        <Item name={dir.name} count={dir.fileCount} id={path + '/' + dir.name}/>
-                        <ItemList dirJsonTree={dir.contents} dirPath={path + '/' + dir.name}/>
+                        <Dir name={dir.name} count={dir.fileCount} id={path + '/' + dir.name}/>
+                        <DirList dirJsonTree={dir.contents} dirPath={path + '/' + dir.name}/>
                     </div>
                 )
             } else {
                 return (
-                    <Item name={dir.name} count={dir.fileCount} key={path + '/' + dir.name} id={path + '/' + dir.name}/>
+                    <Dir name={dir.name} count={dir.fileCount} key={path + '/' + dir.name} id={path + '/' + dir.name}/>
                 )
             }
         })
     }
 
     render() {
-        const {dirJsonTree, dirPath, url} = this.props
+        const {dirJsonTree, dirPath} = this.props
         var hierarchy = this.hierarchicalArrangment(dirJsonTree, dirPath)
 
         return (
@@ -45,5 +49,6 @@ class ItemList extends Component {
     }
 }
 
-ItemList.propTypes = propTypes
-export default ItemList
+DirList.propTypes = propTypes
+DirList.defaultProps = defaultProps
+export default DirList

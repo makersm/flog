@@ -72,8 +72,15 @@ function getURL() {
     return contents['url'].toString('utf-8')
 }
 
+function getPostNames(cwdPath) {
+    let fileNames = childProcess.execSync('ls -p | grep -v \\', {cwd: cwdPath}).toString('utf-8')
+    let jsonFileNames = JSON.parse(fileNames)
+
+    return jsonFileNames
+}
+
 module.exports = {
     getDirTree,
     getRootPath,
-    getURL
+    getPostNames
 }

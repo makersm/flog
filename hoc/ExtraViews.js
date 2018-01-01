@@ -3,7 +3,7 @@ import {TableOfContents, Indicator} from '../components'
 export const withExtra = (childrenType, MatchComponent, propData) => {
     const componentPair = {
         'Post': TableOfContents,
-        'PostList': Indicator
+        'PostNameList': Indicator
     }
 
     if(componentPair[childrenType] !== MatchComponent) {

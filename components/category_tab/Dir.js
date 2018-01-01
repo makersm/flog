@@ -17,7 +17,7 @@ const InlineStyle = () => (
 	`}</style>
 )
 
-class Item extends Component {
+class Dir extends Component {
 
     constructor(props) {
         super(props)
@@ -35,7 +35,7 @@ class Item extends Component {
         return (
             <div>
                 <InlineStyle/>
-                <Link prefetch href={{ pathname: '/category', query: { path: id }}} as={`/category`}>
+                <Link prefetch href={{ pathname: '/category', query: { path: id }}} as={`/category${id}`}>
                 <li onClick={ e => this.spread(id, e)}>
                     {name} <span className="count">[{count}]</span>
                     <span className="dropdown">{children}</span>
@@ -46,4 +46,4 @@ class Item extends Component {
     }
 }
 
-export default Item
+export default Dir

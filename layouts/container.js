@@ -33,7 +33,6 @@ class Container extends Component {
     }
 
     extraComponent(component, state) {
-        // console.log(`component: ${component}`)
         return withExtra(this.props.children.type.name, component, state)
     }
 
