@@ -29,7 +29,7 @@ class Category extends Component {
 
     render() {
         const {dirJsonTree, postNames, errorMsg} = this.props
-        if(errorMsg) return <Error errorMsg={this.state.errorMsg}/>
+        if(errorMsg) return <Error errorMsg={errorMsg}/>
         return (
             <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>

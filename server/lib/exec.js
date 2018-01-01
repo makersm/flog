@@ -77,7 +77,6 @@ function getPostNames(cwdPath) {
     let jsonFileNames = fileNames.split(/[\n]+/);
     jsonFileNames = jsonFileNames.filter((name) => {return name.length > 0})
 
-    console.log(jsonFileNames)
     return jsonFileNames
 }
 

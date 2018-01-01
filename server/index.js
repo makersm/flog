@@ -21,7 +21,6 @@ app.prepare()
     })
 
     server.get('/category*', (req, res) => {
-        console.log('category called')
         let param = req.originalUrl.split('/category')[1]
         let basePath = getRootPath()
         let commonQueryParams = {dirJsonTree: getDirTree()}
