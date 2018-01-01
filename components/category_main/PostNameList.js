@@ -9,6 +9,10 @@ const InlineStyle = () => (
     `}</style>
 )
 
+const defaultProps = {
+    postNames: []
+}
+
 
 const PostNameList = (props) => {
     const {postNames} = props
@@ -23,4 +27,5 @@ const PostNameList = (props) => {
     );
 };
 
+PostNameList.defaultProps = defaultProps
 export default PostNameList
