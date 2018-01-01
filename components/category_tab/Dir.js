@@ -35,7 +35,7 @@ class Dir extends Component {
         return (
             <div>
                 <InlineStyle/>
-                <Link prefetch href={{ pathname: '/category', query: { path: id }}} as={`/category${id}`}>
+                <Link href={{ pathname: '/category', query: { path: id }}} as={`/category${id}`}>
                 <li onClick={ e => this.spread(id, e)}>
                     {name} <span className="count">[{count}]</span>
                     <span className="dropdown">{children}</span>

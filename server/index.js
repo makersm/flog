@@ -13,24 +13,28 @@ app.prepare()
 	const server = express()
 
     server.get('/_next*', (req, res) => {
-        console.log('fuck you'+req.url)
+        return handle(req, res)
+    })
+
+    server.get('/_webpack*', (req, res) => {
         return handle(req, res)
     })
 
     server.get('/category*', (req, res) => {
-        console.log('hello world')
+        console.log('category called')
+        let param = req.originalUrl.split('/category')[1]
         let basePath = getRootPath()
         let commonQueryParams = {dirJsonTree: getDirTree()}
 
         //Defending Semantic URL attack
-        if( req.param.id.indexOf('//') !== -1 ||
-            req.param.id.indexOf('..') !== -1) {
+        if( param.indexOf('//') !== -1 ||
+            param.indexOf('..') !== -1) {
             console.log('Wrong url access')
             res.statusCode = 403
             return app.renderError(null, req, res, '/category', req.query)
         }
 
-        // commonQueryParams['postNames'] = getPostNames(basePath+req.query.id)
+        commonQueryParams['postNames'] = getPostNames(basePath+param)
 
         if(req.get('http_x_requested_with')) {
             return res.send(commonQueryParams)

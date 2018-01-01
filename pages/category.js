@@ -17,23 +17,24 @@ const InlineStyle = () => (
 class Category extends Component {
     constructor(props) {
         super(props)
-
-        if (this.props)
-            this.state = this.props
     }
 
     componentDidMount() {
         Fonts()
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+        return nextProps.postNames !== this.props.postNames;
+    }
+
     render() {
-        const {dirJsonTree, postNames, errorMsg} = this.state
+        const {dirJsonTree, postNames, errorMsg} = this.props
         if(errorMsg) return <Error errorMsg={this.state.errorMsg}/>
         return (
             <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
                 <PostListContainer>
-                    <PostNameList postNames={[1,2,3,4,5]}/>
+                    <PostNameList postNames={postNames}/>
                 </PostListContainer>
             </Page>
         )
@@ -58,6 +59,8 @@ Category.getInitialProps = async function (context) {
                 console.error(err)
                 return {errorMsg: err}
             })
+
+        console.log(responseData)
 
         return responseData
     }

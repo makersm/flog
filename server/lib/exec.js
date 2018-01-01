@@ -73,9 +73,11 @@ function getURL() {
 }
 
 function getPostNames(cwdPath) {
-    let fileNames = childProcess.execSync('ls -p | grep -v \\', {cwd: cwdPath}).toString('utf-8')
-    let jsonFileNames = JSON.parse(fileNames)
+    let fileNames = childProcess.execSync('ls -p | grep -v /', {cwd: cwdPath}).toString('utf-8')
+    let jsonFileNames = fileNames.split(/[\n]+/);
+    jsonFileNames = jsonFileNames.filter((name) => {return name.length > 0})
 
+    console.log(jsonFileNames)
     return jsonFileNames
 }
 
