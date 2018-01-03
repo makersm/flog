@@ -1,7 +1,7 @@
 const express = require('express')
 const next = require('next')
 
-const { getDirTree, getRootPath, getPostNames } = require('./lib/exec')
+const { getDirTree, getBasePath, getPostsInfo, getAllPostsInfo } = require('./lib/exec')
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
@@ -22,18 +22,25 @@ app.prepare()
 
     server.get('/category*', (req, res) => {
         let param = req.originalUrl.split('/category')[1]
-        let basePath = getRootPath()
+        let basePath = getBasePath()
         let commonQueryParams = {dirJsonTree: getDirTree()}
 
         //Defending Semantic URL attack
-        if( param.indexOf('//') !== -1 ||
-            param.indexOf('..') !== -1) {
+        let targetPath = basePath+param
+        if( targetPath.indexOf('//') !== -1 ||
+            targetPath.indexOf('..') !== -1) {
             console.log('Wrong url access')
             res.statusCode = 403
             return app.renderError(null, req, res, '/category', req.query)
         }
 
-        commonQueryParams['postNames'] = getPostNames(basePath+param)
+        let postsInfo
+        if(!param || param === '/')
+            postsInfo = getAllPostsInfo(basePath)
+        else
+            postsInfo = getPostsInfo(basePath, param)
+
+        commonQueryParams['postsInfo'] = postsInfo
 
         if(req.get('http_x_requested_with')) {
             return res.send(commonQueryParams)

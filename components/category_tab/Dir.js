@@ -7,6 +7,7 @@ const InlineStyle = () => (
             font-size: 1.2rem;
             margin: 5px;
             clear: both;
+            cursor: pointer;
         }
 		.count {
 			color: gray;

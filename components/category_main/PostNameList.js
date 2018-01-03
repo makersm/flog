@@ -1,8 +1,12 @@
-import React from 'react'
+import React, {Component} from 'react'
 import {PostName} from '../../components'
 
 const InlineStyle = () => (
     <style>{`
+        hr {
+            border-top: 1px dotted #8c8b8b;
+            border-bottom: 1px dotted #fff;
+        }
         .PostNameList {
 
         }
@@ -10,21 +14,27 @@ const InlineStyle = () => (
 )
 
 const defaultProps = {
-    postNames: []
+    postsInfo: []
 }
 
 
-const PostNameList = (props) => {
-    const {postNames} = props
-    return (
-        <div className='PostNameList'>
-            <InlineStyle/>
-            {postNames.map((postName, i) => {
-                //todo i is temperary key
-                return <PostName name={postName} key={i}/>
-            })}
-        </div>
-    );
+class PostNameList extends Component {
+    constructor(props) {
+        super(props)
+    }
+
+    render() {
+        const {postsInfo} = this.props
+        return (
+            <div className='PostNameList'>
+                <InlineStyle/>
+                <hr/>
+                {postsInfo.map((postInfo) => {
+                    return <PostName name={postInfo.name} key={postInfo.path} id={postInfo.path}/>
+                })}
+            </div>
+        )
+    }
 };
 
 PostNameList.defaultProps = defaultProps

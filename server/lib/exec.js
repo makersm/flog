@@ -47,7 +47,7 @@ function JSONDirfilter(jsonTree) {
     return jsonTree
 }
 
-function getRootPath() {
+function getBasePath() {
     const configDir = path.join(__dirname, CONFIG_DIR.join('/'))
     const contents = loadFile(configDir, 'config.json')
     const cwdPath = absolutePath(contents['root'], configDir)
@@ -56,38 +56,86 @@ function getRootPath() {
 }
 
 function getDirTree() {
-    const cwdPath = getRootPath()
+    const basePath = getBasePath()
 
-    let tree = childProcess.execSync('tree -J', {cwd: cwdPath}).toString('utf-8')
+    let tree = childProcess.execSync('tree -J', {cwd: basePath}).toString('utf-8')
     let jsonTree = JSON.parse(tree)
     let jsonDirTree = JSONDirfilter(jsonTree)
+    jsonDirTree[0]['contents'].push({type: 'all', name: 'all', fileCount: getAllPostsCount(basePath), contents: []})
 
     return jsonDirTree[0]['contents']
 }
 
-function getURL() {
-    const configDir = path.join(__dirname, CONFIG_DIR.join('/'))
-    const contents = loadFile(configDir, 'config.json')
+function getPostsInfo(basePath, param) {
+    let cwdPath = basePath+param
+    let rawFileNames = childProcess.execSync('find . -maxdepth 1 -type f', {cwd: cwdPath}).toString('utf-8')
 
-    return contents['url'].toString('utf-8')
-}
-
-function getPostNames(cwdPath) {
-    console.log(cwdPath)
-
-    let fileNames = childProcess.execSync('find . -maxdepth 1 -type f', {cwd: cwdPath}).toString('utf-8')
-
-    if(!fileNames)
+    if(!rawFileNames)
         return []
 
-    let jsonFileNames = fileNames.split(/[\n]*.\//);
-    jsonFileNames = jsonFileNames.filter((name) => {return name.length > 0})
+    let fileNamesWithPath = rawFileNames.split(/[\n]/);
+    fileNamesWithPath = fileNamesWithPath.filter((line) => {return line.length > 0})
+    let jsonFileNames = fileNamesWithPath.map((line) => {
+        let n = line.split('./')
+        let name = n[1]
+        return {path: param+'/'+name, name: name}
+    })
 
     return jsonFileNames
 }
 
+function getAllPostsInfo(cwdPath) {
+    let rawFileNames = childProcess.execSync('find . -type f', {cwd: cwdPath}).toString('utf-8')
+
+    if(!rawFileNames)
+        return []
+
+    let fileNamesWithPath = rawFileNames.split(/[\n]/)
+    fileNamesWithPath = fileNamesWithPath.filter((line) => {return line.length > 0})
+    let jsonFileNames = fileNamesWithPath.map((line) => {
+        let n = line.split('/')
+        let name = n[n.length-1]
+
+        let path = line.split('.')[1]
+        return {path: path, name: name}
+    })
+
+    return jsonFileNames
+}
+
+function getAllPostsCount(cwdPath) {
+    let rawFileNames = childProcess.execSync('find . -type f', {cwd: cwdPath}).toString('utf-8')
+    let fileNames = rawFileNames.split('\n')
+
+    fileNames = fileNames.filter((name) => {return name.length > 0})
+
+    return fileNames.length
+}
+
+function readPost() {
+    console.log(cwdPath)
+
+    let fileNames = childProcess.execSync('ls --full-time -t -r | grep \'^-\'', {cwd: cwdPath}).toString('utf-8').trim()
+
+    if(!fileNames)
+        return []
+
+    let jsonFileNames = fileNames.split(/[\n]/);
+    let dateReg = new RegExp(/[0-9]{4}-[0-9]{2}-[0-9]{2}/)
+    let nameWithUTCReg = new RegExp(/(\+|\-)[0-9]{4}[\s].*/)
+    jsonFileNames = jsonFileNames.map((line) => {
+        let date = dateReg.exec(line)
+        let nameWithUTC = nameWithUTCReg.exec(line)
+        let name = nameWithUTC[0].split(/(\+|\-)[0-9]{4}[\s]/)
+        return {date: date[0], name: name[0]}
+    })
+
+    return jsonFileNames
+
+}
 module.exports = {
     getDirTree,
-    getRootPath,
-    getPostNames
+    getBasePath,
+    getPostsInfo,
+    getAllPostsInfo
 }

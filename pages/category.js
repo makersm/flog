@@ -23,18 +23,14 @@ class Category extends Component {
         Fonts()
     }
 
-    shouldComponentUpdate(nextProps, nextState){
-        return nextProps.postNames !== this.props.postNames;
-    }
-
     render() {
-        const {dirJsonTree, postNames, errorMsg} = this.props
+        const {dirJsonTree, postsInfo, errorMsg} = this.props
         if(errorMsg) return <Error errorMsg={errorMsg}/>
         return (
             <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
                 <PostListContainer>
-                    <PostNameList postNames={postNames}/>
+                    <PostNameList postsInfo={postsInfo}/>
                 </PostListContainer>
             </Page>
         )
@@ -59,8 +55,6 @@ Category.getInitialProps = async function (context) {
                 console.error(err)
                 return {errorMsg: err}
             })
-
-        console.log(responseData)
 
         return responseData
     }

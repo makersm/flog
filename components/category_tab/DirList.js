@@ -28,20 +28,32 @@ class DirList extends Component {
                     </div>
                 )
             } else {
-                return (
-                    <Dir name={dir.name} count={dir.fileCount} key={path + '/' + dir.name} id={path + '/' + dir.name}/>
-                )
+                if(dir.type !== 'all')
+                    return (
+                        <Dir name={dir.name} count={dir.fileCount} key={path + '/' + dir.name} id={path + '/' + dir.name}/>
+                    )
             }
+        })
+    }
+
+    getAllComponent(jsonTree) {
+        return jsonTree.map(dir => {
+            if(dir.type === 'all')
+                return (
+                    <Dir name={dir.name} count={dir.fileCount} key={'/'} id={'/'}/>
+                )
         })
     }
 
     render() {
         const {dirJsonTree, dirPath} = this.props
-        var hierarchy = this.hierarchicalArrangment(dirJsonTree, dirPath)
+        let hierarchy = this.hierarchicalArrangment(dirJsonTree, dirPath)
+        let allComponent = this.getAllComponent(dirJsonTree, dirPath)
 
         return (
             <div>
                 <ul>
+                    {allComponent}
                     {hierarchy}
                 </ul>
             </div>

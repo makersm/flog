@@ -3,19 +3,15 @@ import Link from 'next/link'
 
 const InlineStyle = () => (
     <style>{`
-        hr {
-            border-top: 1px dotted #8c8b8b;
-            border-bottom: 1px dotted #fff;
-        }
         .PostName {
-
+            cursor: pointer;
         }
     `}</style>
 )
 
 
 const PostName = (props) => {
-    const {name} = props
+    const {name, id} = props
     return (
         <div className='PostName'>
             <InlineStyle/>
