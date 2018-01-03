@@ -73,12 +73,12 @@ function getPostsInfo(basePath, param) {
     if(!rawFileNames)
         return []
 
-    let fileNamesWithPath = rawFileNames.split(/[\n]/);
-    fileNamesWithPath = fileNamesWithPath.filter((line) => {return line.length > 0})
-    fileNamesWithPath.sort((a, b) => {
+    let fileNamesWithPathAndDate = rawFileNames.split(/[\n]/);
+    fileNamesWithPathAndDate = fileNamesWithPathAndDate.filter((line) => {return line.length > 0})
+    fileNamesWithPathAndDate.sort((a, b) => {
         return a > b ? 1 : -1
     })
-    let jsonFileNames = fileNamesWithPath.map((line) => {
+    let jsonFileNames = fileNamesWithPathAndDate.map((line) => {
         let n = line.split('./')
         let name = n[1]
         return {path: param+'/'+name, name: name}
@@ -93,12 +93,12 @@ function getAllPostsInfo(cwdPath) {
     if(!rawFileNames)
         return []
 
-    let fileNamesWithPath = rawFileNames.split(/[\n]/)
-    fileNamesWithPath = fileNamesWithPath.filter((line) => {return line.length > 0})
-    fileNamesWithPath.sort((a, b) => {
+    let fileNamesWithPathAndDate = rawFileNames.split(/[\n]/)
+    fileNamesWithPathAndDate = fileNamesWithPathAndDate.filter((line) => {return line.length > 0})
+    fileNamesWithPathAndDate.sort((a, b) => {
         return a > b ? 1 : -1
     })
-    let jsonFileNames = fileNamesWithPath.map((line) => {
+    let jsonFileNames = fileNamesWithPathAndDate.map((line) => {
         let n = line.split('/')
         let name = n[n.length-1]
 
@@ -118,30 +118,33 @@ function getAllPostsCount(cwdPath) {
     return fileNames.length
 }
 
-function readPost() {
-    console.log(cwdPath)
+function getPostInfo(basePath, param) {
+    let allPath = basePath+param
+    let n = param.split('/')
+    let name = n[n.length-1]
+    let cwdPath = allPath.split('/'+name)[0]
 
-    let fileNames = childProcess.execSync('ls --full-time -t -r | grep \'^-\'', {cwd: cwdPath}).toString('utf-8').trim()
-
-    if(!fileNames)
-        return []
-
-    let jsonFileNames = fileNames.split(/[\n]/);
+    let rawFileName = childProcess.execSync(`find . -maxdepth 1 -name ${name} -type f -printf \'%AY-%Am-%Ad%p\\n\'`, {cwd: cwdPath})
+        .toString('utf-8').trim()
     let dateReg = new RegExp(/[0-9]{4}-[0-9]{2}-[0-9]{2}/)
-    let nameWithUTCReg = new RegExp(/(\+|\-)[0-9]{4}[\s].*/)
-    jsonFileNames = jsonFileNames.map((line) => {
-        let date = dateReg.exec(line)
-        let nameWithUTC = nameWithUTCReg.exec(line)
-        let name = nameWithUTC[0].split(/(\+|\-)[0-9]{4}[\s]/)
-        return {date: date[0], name: name[0]}
-    })
+    let date = dateReg.exec(rawFileName)
 
-    return jsonFileNames
+    let contents = readPost(cwdPath, name)
+
+    return {title: name, date: date, contents: contents}
 
 }
+
+function readPost(cwdPath, name) {
+    let htmlFileContents = childProcess.execSync(`rst2html5 ${name}`, {cwd: cwdPath}).toString('utf-8').trim()
+
+    return htmlFileContents
+}
+
 module.exports = {
     getDirTree,
     getBasePath,
     getPostsInfo,
-    getAllPostsInfo
+    getAllPostsInfo,
+    getPostInfo
 }

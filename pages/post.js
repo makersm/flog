@@ -14,7 +14,7 @@ const InlineStyle = () => (
 	`}</style>
 )
 
-class Index extends Component {
+class Post extends Component {
     constructor(props) {
         super(props)
     }
@@ -24,28 +24,32 @@ class Index extends Component {
     }
 
     render() {
-        const {dirJsonTree, errorMsg} = this.props
+        const {dirJsonTree, postInfo, errorMsg} = this.props
         if(errorMsg) return <Error errorMsg={errorMsg}/>
         return (
             <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
                 <PostContainer>
-                    <PostView/>
+                    <PostView postInfo={postInfo}/>
                 </PostContainer>
             </Page>
         )
     }
 }
 
-Index.getInitialProps = async function (context) {
+Post.getInitialProps = async function (context) {
     if(context.query['dirJsonTree'] && context.query['dirJsonTree'][0])
         return context.query
     else {
         const config = {headers: {'http_x_requested_with': 'axios'}}
+
         //TODO how to set url and basepath
         const url = 'http://localhost:3000'
+        const pathName = context.pathname
+        const id = context.query.path
+        console.log(`${url}${pathName}${id}`)
 
-        const responseData = axios.get(`${url}`, config)
+        const responseData = axios.get(`${url}${pathName}${id}`, config)
             .then((response) => {return response.data})
             .catch(err => {
                 console.error(err)
@@ -56,4 +60,4 @@ Index.getInitialProps = async function (context) {
     }
 }
 
-export default Index;
+export default Post;

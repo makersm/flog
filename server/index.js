@@ -1,7 +1,7 @@
 const express = require('express')
 const next = require('next')
 
-const { getDirTree, getBasePath, getPostsInfo, getAllPostsInfo } = require('./lib/exec')
+const { getDirTree, getBasePath, getPostsInfo, getAllPostsInfo, getPostInfo } = require('./lib/exec')
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
@@ -46,6 +46,32 @@ app.prepare()
             return res.send(commonQueryParams)
         } else {
             return app.render(req, res, '/category', commonQueryParams)
+        }
+    })
+
+    server.get('/post*', (req, res) => {
+        let param = req.originalUrl.split('/post')[1]
+        let basePath = getBasePath()
+        let commonQueryParams = {dirJsonTree: getDirTree()}
+
+        //Defending Semantic URL attack
+        let targetPath = basePath+param
+        if( targetPath.indexOf('//') !== -1 ||
+            targetPath.indexOf('..') !== -1) {
+            console.log('Wrong url access')
+            res.statusCode = 403
+            return app.renderError(null, req, res, '/post', req.query)
+        }
+
+        let postInfo
+        postInfo = getPostInfo(basePath, param)
+
+        commonQueryParams['postInfo'] = postInfo
+
+        if(req.get('http_x_requested_with')) {
+            return res.send(commonQueryParams)
+        } else {
+            return app.render(req, res, '/post', commonQueryParams)
         }
     })
 

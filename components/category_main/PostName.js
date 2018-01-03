@@ -5,6 +5,7 @@ const InlineStyle = () => (
     <style>{`
         .PostName {
             cursor: pointer;
+            font-size: 1.2rem;
         }
     `}</style>
 )
@@ -15,9 +16,9 @@ const PostName = (props) => {
     return (
         <div className='PostName'>
             <InlineStyle/>
-            {/*<Link prefetch href={{ pathname: '/post', query: { path: id }}}>*/}
+            <Link prefetch href={{ pathname: '/post', query: { path: id }}} as={`/post${id}`}>
                 {name}
-            {/*</Link>*/}
+            </Link>
             <hr/>
         </div>
     );
