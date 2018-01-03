@@ -68,13 +68,16 @@ function getDirTree() {
 
 function getPostsInfo(basePath, param) {
     let cwdPath = basePath+param
-    let rawFileNames = childProcess.execSync('find . -maxdepth 1 -type f', {cwd: cwdPath}).toString('utf-8')
+    let rawFileNames = childProcess.execSync('find . -maxdepth 1 -type f -printf \'%AY-%Am-%Ad%p\\n\'', {cwd: cwdPath}).toString('utf-8')
 
     if(!rawFileNames)
         return []
 
     let fileNamesWithPath = rawFileNames.split(/[\n]/);
     fileNamesWithPath = fileNamesWithPath.filter((line) => {return line.length > 0})
+    fileNamesWithPath.sort((a, b) => {
+        return a > b ? 1 : -1
+    })
     let jsonFileNames = fileNamesWithPath.map((line) => {
         let n = line.split('./')
         let name = n[1]
@@ -85,13 +88,16 @@ function getPostsInfo(basePath, param) {
 }
 
 function getAllPostsInfo(cwdPath) {
-    let rawFileNames = childProcess.execSync('find . -type f', {cwd: cwdPath}).toString('utf-8')
+    let rawFileNames = childProcess.execSync('find . -type f -printf \'%AY-%Am-%Ad%p\\n\'', {cwd: cwdPath}).toString('utf-8')
 
     if(!rawFileNames)
         return []
 
     let fileNamesWithPath = rawFileNames.split(/[\n]/)
     fileNamesWithPath = fileNamesWithPath.filter((line) => {return line.length > 0})
+    fileNamesWithPath.sort((a, b) => {
+        return a > b ? 1 : -1
+    })
     let jsonFileNames = fileNamesWithPath.map((line) => {
         let n = line.split('/')
         let name = n[n.length-1]
