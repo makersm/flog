@@ -32,14 +32,15 @@ class Dir extends Component {
 
     render()
     {
-        const {name, count, id, children} = this.props
+        const {name, count, id} = this.props
         return (
             <div>
                 <InlineStyle/>
                 <Link href={{ pathname: '/category', query: { path: id }}} as={`/category${id}`}>
                 <li onClick={ e => this.spread(id, e)}>
-                    {name} <span className="count">[{count}]</span>
-                    <span className="dropdown">{children}</span>
+                    <a>
+                        {name} <span className="count">[{count}]</span>
+                    </a>
                 </li>
                 </Link>
             </div>

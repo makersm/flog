@@ -2,7 +2,7 @@ import {TableOfContents, Indicator} from '../components'
 
 export const withExtra = (childrenType, MatchComponent, propData) => {
     const componentPair = {
-        'Post': TableOfContents,
+        'PostView': TableOfContents,
         'PostNameList': Indicator
     }
 

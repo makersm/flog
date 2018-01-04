@@ -8,6 +8,8 @@ const CONFIG_DIR = [
     'config'
 ]
 
+const imgReg = new RegExp(/\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)/)
+
 function absolutePath(path, cwdPath) {
     path = `realpath ${ path }`
     let result
@@ -78,10 +80,12 @@ function getPostsInfo(basePath, param) {
     fileNamesWithPathAndDate.sort((a, b) => {
         return a > b ? 1 : -1
     })
-    let jsonFileNames = fileNamesWithPathAndDate.map((line) => {
+    let jsonFileNames = []
+    fileNamesWithPathAndDate.forEach((line) => {
         let n = line.split('./')
         let name = n[1]
-        return {path: param+'/'+name, name: name}
+        if(!imgReg.test(name))
+            jsonFileNames.push({path: param+'/'+name, name: name})
     })
 
     return jsonFileNames
@@ -98,12 +102,15 @@ function getAllPostsInfo(cwdPath) {
     fileNamesWithPathAndDate.sort((a, b) => {
         return a > b ? 1 : -1
     })
-    let jsonFileNames = fileNamesWithPathAndDate.map((line) => {
+
+    let jsonFileNames = []
+    fileNamesWithPathAndDate.forEach((line) => {
         let n = line.split('/')
         let name = n[n.length-1]
 
         let path = line.split('.')[1]
-        return {path: path, name: name}
+        if(!imgReg.test(name))
+            jsonFileNames.push({path: path, name: name})
     })
 
     return jsonFileNames
@@ -113,7 +120,7 @@ function getAllPostsCount(cwdPath) {
     let rawFileNames = childProcess.execSync('find . -type f', {cwd: cwdPath}).toString('utf-8')
     let fileNames = rawFileNames.split('\n')
 
-    fileNames = fileNames.filter((name) => {return name.length > 0})
+    fileNames = fileNames.filter((name) => {return name.length > 0 && !imgReg.test(name)})
 
     return fileNames.length
 }
@@ -136,7 +143,7 @@ function getPostInfo(basePath, param) {
 }
 
 function readPost(cwdPath, name) {
-    let htmlFileContents = childProcess.execSync(`rst2html5 ${name}`, {cwd: cwdPath}).toString('utf-8').trim()
+    let htmlFileContents = childProcess.execSync(`rst2html5 ${name}`, {cwd: cwdPath}).toString('utf-8')
 
     return htmlFileContents
 }
@@ -146,5 +153,5 @@ module.exports = {
     getBasePath,
     getPostsInfo,
     getAllPostsInfo,
-    getPostInfo
+    getPostInfo,
 }

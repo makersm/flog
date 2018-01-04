@@ -1,7 +1,7 @@
 const express = require('express')
 const next = require('next')
 
-const { getDirTree, getBasePath, getPostsInfo, getAllPostsInfo, getPostInfo } = require('./lib/exec')
+const { getDirTree, getBasePath, getPostsInfo, getAllPostsInfo, getPostInfo, getImage } = require('./lib/exec')
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
@@ -43,7 +43,7 @@ app.prepare()
         commonQueryParams['postsInfo'] = postsInfo
 
         if(req.get('http_x_requested_with')) {
-            return res.send(commonQueryParams)
+            res.send(commonQueryParams)
         } else {
             return app.render(req, res, '/category', commonQueryParams)
         }
@@ -52,7 +52,7 @@ app.prepare()
     server.get('/post*', (req, res) => {
         let param = req.originalUrl.split('/post')[1]
         let basePath = getBasePath()
-        let commonQueryParams = {dirJsonTree: getDirTree()}
+        let imgReg = new RegExp(/\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)/)
 
         //Defending Semantic URL attack
         let targetPath = basePath+param
@@ -63,13 +63,23 @@ app.prepare()
             return app.renderError(null, req, res, '/post', req.query)
         }
 
+        ////// send img file ///////////////////////////////////////
+        if(imgReg.test(param)) {
+            let postFix = imgReg.exec(param)[1]
+            res.set('Content-Type', `image/${postFix}`)
+            res.sendFile(basePath+param)
+        }
+
+        ////// send text ////////////////////////////////////////////
+        let commonQueryParams = {dirJsonTree: getDirTree()}
+
         let postInfo
         postInfo = getPostInfo(basePath, param)
 
         commonQueryParams['postInfo'] = postInfo
 
         if(req.get('http_x_requested_with')) {
-            return res.send(commonQueryParams)
+            res.send(commonQueryParams)
         } else {
             return app.render(req, res, '/post', commonQueryParams)
         }
