@@ -68,15 +68,28 @@ function getDirTree() {
     return jsonDirTree[0]['contents']
 }
 
-function getPostsInfo(basePath, param) {
+function getPostsInfo(basePath, param, error) {
     let cwdPath = basePath+param
-    let rawFileNames = childProcess.execSync('find . -maxdepth 1 -type f -printf \'%AY-%Am-%Ad%p\\n\'', {cwd: cwdPath}).toString('utf-8')
+    console.log(cwdPath)
+    let resultObj = childProcess.spawnSync('find',
+        ['.', '-maxdepth', '1', '-type', 'f', '-printf', '%AY-%Am-%Ad%p\n'],
+        {cwd: cwdPath})
 
-    if(!rawFileNames)
+    if(resultObj.error || resultObj.stdout === null) {
+        console.log('error')
+        return error()
+    }
+
+    let rawData = resultObj.stdout.toString('utf-8')
+    console.log(resultObj.stderr.toString('utf-8'))
+
+    if(!rawData)
         return []
 
-    let fileNamesWithPathAndDate = rawFileNames.split(/[\n]/);
+    let fileNamesWithPathAndDate = rawData.split(/[\n]/);
     fileNamesWithPathAndDate = fileNamesWithPathAndDate.filter((line) => {return line.length > 0})
+    console.log(fileNamesWithPathAndDate)
+
     fileNamesWithPathAndDate.sort((a, b) => {
         return a > b ? 1 : -1
     })
@@ -87,6 +100,8 @@ function getPostsInfo(basePath, param) {
         if(!imgReg.test(name))
             jsonFileNames.push({path: param+'/'+name, name: name})
     })
+
+    console.log(jsonFileNames)
 
     return jsonFileNames
 }
@@ -125,16 +140,20 @@ function getAllPostsCount(cwdPath) {
     return fileNames.length
 }
 
-function getPostInfo(basePath, param) {
+function getPostInfo(basePath, param, error) {
     let allPath = basePath+param
     let n = param.split('/')
     let name = n[n.length-1]
     let cwdPath = allPath.split('/'+name)[0]
 
-    let rawFileName = childProcess.execSync(`find . -maxdepth 1 -name ${name} -type f -printf \'%AY-%Am-%Ad%p\\n\'`, {cwd: cwdPath})
-        .toString('utf-8').trim()
-    let dateReg = new RegExp(/[0-9]{4}-[0-9]{2}-[0-9]{2}/)
-    let date = dateReg.exec(rawFileName)
+    let resultObj = childProcess.spawnSync('find',
+        ['.', '-maxdepth', '1', '-name', name, '-type', 'f', '-printf', '%AY-%Am-%Ad\n'],
+        {cwd: cwdPath})
+
+    if(resultObj.error || !resultObj.stdout.toString('utf-8').trim())
+        return error()
+
+    let date = resultObj.stdout.toString('utf-8')
 
     let contents = readPost(cwdPath, name)
 
@@ -142,10 +161,15 @@ function getPostInfo(basePath, param) {
 
 }
 
-function readPost(cwdPath, name) {
-    let htmlFileContents = childProcess.execSync(`rst2html5 ${name}`, {cwd: cwdPath}).toString('utf-8')
+function readPost(cwdPath, name, error) {
+    let resultObj = childProcess.spawnSync('rst2html5',
+        [name],
+        {cwd: cwdPath})
 
-    return htmlFileContents
+    if(resultObj.error)
+        error()
+
+    return resultObj.stdout === null ? '' : resultObj.stdout.toString('utf-8')
 }
 
 module.exports = {

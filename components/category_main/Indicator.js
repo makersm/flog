@@ -9,10 +9,11 @@ const InlineStyle = () => (
 )
 
 const Indicator = () => {
+    //TODO generate indicator at 1.1
     return (
         <div className='Indicator'>
             <InlineStyle/>
-            hello world
+
         </div>
     );
 };

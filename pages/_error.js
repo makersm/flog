@@ -32,7 +32,7 @@ class Error extends React.Component {
                     <Icon name="exclamation"/>
                     <h1>{this.props.errorMsg
                         ? `${this.props.errorMsg}` : this.props.statusCode
-                        ? `An error ${this.props.statusCode} occurred on server. please try again later.`
+                        ? `An ${this.props.statusCode} error occurred on server`
                         : 'An error occurred on client'}
 
                     </h1>

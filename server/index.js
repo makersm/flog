@@ -1,12 +1,11 @@
 const express = require('express')
 const next = require('next')
 
-const { getDirTree, getBasePath, getPostsInfo, getAllPostsInfo, getPostInfo, getImage } = require('./lib/exec')
+const { getDirTree, getBasePath, getPostsInfo, getAllPostsInfo, getPostInfo} = require('./lib/exec')
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
-
 
 app.prepare()
 .then(() => {
@@ -22,13 +21,14 @@ app.prepare()
 
     server.get('/category*', (req, res) => {
         let param = req.originalUrl.split('/category')[1]
+        param = decodeURIComponent(param)
         let basePath = getBasePath()
         let commonQueryParams = {dirJsonTree: getDirTree()}
 
         //Defending Semantic URL attack
         let targetPath = basePath+param
         if( targetPath.indexOf('//') !== -1 ||
-            targetPath.indexOf('..') !== -1) {
+            targetPath.indexOf('../') !== -1) {
             console.log('Wrong url access')
             res.statusCode = 403
             return app.renderError(null, req, res, '/category', req.query)
@@ -38,7 +38,10 @@ app.prepare()
         if(!param || param === '/')
             postsInfo = getAllPostsInfo(basePath)
         else
-            postsInfo = getPostsInfo(basePath, param)
+            postsInfo = getPostsInfo(basePath, param, () => {
+                res.statusCode = 404
+                return app.renderError(null, req, res, '/category', req.query)
+            })
 
         commonQueryParams['postsInfo'] = postsInfo
 
@@ -51,13 +54,14 @@ app.prepare()
 
     server.get('/post*', (req, res) => {
         let param = req.originalUrl.split('/post')[1]
+        param = decodeURIComponent(param)
         let basePath = getBasePath()
         let imgReg = new RegExp(/\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)/)
 
         //Defending Semantic URL attack
         let targetPath = basePath+param
         if( targetPath.indexOf('//') !== -1 ||
-            targetPath.indexOf('..') !== -1) {
+            targetPath.indexOf('../') !== -1) {
             console.log('Wrong url access')
             res.statusCode = 403
             return app.renderError(null, req, res, '/post', req.query)
@@ -74,7 +78,10 @@ app.prepare()
         let commonQueryParams = {dirJsonTree: getDirTree()}
 
         let postInfo
-        postInfo = getPostInfo(basePath, param)
+        postInfo = getPostInfo(basePath, param, () => {
+            res.statusCode = 404
+            return app.renderError(null, req, res, '/post', req.query)
+        })
 
         commonQueryParams['postInfo'] = postInfo
 
