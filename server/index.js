@@ -26,23 +26,17 @@ app.prepare()
         let basePath = getBasePath()
         let commonQueryParams = {dirJsonTree: getDirTree()}
 
-        //Defending Semantic URL attack
-        let targetPath = basePath+param
-        if( targetPath.indexOf('//') !== -1 ||
-            targetPath.indexOf('../') !== -1) {
-            console.log('Wrong url access')
-            res.statusCode = 403
-            return app.renderError(null, req, res, '/category', req.query)
-        }
-
         let postsInfo
         if(!param || param === '/')
             postsInfo = getAllPostsInfo(basePath)
         else
             postsInfo = getPostsInfo(basePath, param, () => {
-                res.statusCode = 404
-                return app.renderError(null, req, res, '/category', req.query)
+                return app.render(req, res, '/_error', req.query)
             })
+
+        if(postsInfo instanceof Promise) {
+            return postsInfo
+        }
 
         commonQueryParams['postsInfo'] = postsInfo
 
@@ -58,15 +52,6 @@ app.prepare()
         param = decodeURIComponent(param)
         let basePath = getBasePath()
 
-        //Defending Semantic URL attack
-        let targetPath = basePath+param
-        if( targetPath.indexOf('//') !== -1 ||
-            targetPath.indexOf('../') !== -1) {
-            console.log('Wrong url access')
-            res.statusCode = 403
-            return app.renderError(null, req, res, '/post', req.query)
-        }
-
         ////// send img file ///////////////////////////////////////
         if(imgReg.test(param)) {
             let postFix = imgReg.exec(param)[1]
@@ -78,10 +63,16 @@ app.prepare()
         let commonQueryParams = {dirJsonTree: getDirTree()}
 
         let postInfo
-        postInfo = getPostInfo(basePath, param, () => {
-            res.statusCode = 404
-            return app.renderError(null, req, res, '/post', req.query)
-        })
+        if(!param || param === '/')
+            postInfo = getCurrentPostInfo()
+        else {
+            postInfo = getPostInfo(basePath, param, () => {
+                return app.render(req, res, '/_error', req.query)
+            })
+
+            if (postInfo instanceof Promise)
+                return postInfo
+        }
 
         commonQueryParams['postInfo'] = postInfo
 
@@ -92,9 +83,9 @@ app.prepare()
         }
     })
 
-    server.use('/*.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)$', (req, res) => {
+    server.use('/*\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)$', (req, res) => {
         let basePath = getBasePath()
-        let name = req.originalUrl
+        let name = decodeURIComponent(req.originalUrl)
         let postFix = imgReg.exec(name)[1]
         res.set('Content-Type', `image/${postFix}`)
         res.sendFile(basePath+name)
@@ -109,6 +100,10 @@ app.prepare()
             return app.render(req, res, req.originalUrl, commonQueryParams)
         }
 	})
+
+    server.get('*', (req, res) => {
+        return app.render(req, res, '/_error', req.query)
+    })
 
 	server.listen(3000, (err) => {
 		if (err) throw err

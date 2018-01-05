@@ -8,7 +8,7 @@ const CONFIG_DIR = [
     'config'
 ]
 
-const imgReg = new RegExp(/\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)/)
+const imgReg = new RegExp(/\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)$/)
 
 function absolutePath(path, cwdPath) {
     path = `realpath ${ path }`
@@ -71,7 +71,7 @@ function getDirTree() {
 function getPostsInfo(basePath, param, error) {
     let cwdPath = basePath+param
     let resultObj = childProcess.spawnSync('find',
-        ['.', '-maxdepth', '1', '-type', 'f', '-printf', '%TY-%Tm-%Td%p\n'],
+        ['.', '-maxdepth', '1', '-type', 'f', '-printf', '%TY-%Tm-%Td-%TT%p\n'],
         {cwd: cwdPath})
 
     if(resultObj.error || resultObj.stdout === null)
@@ -100,7 +100,7 @@ function getPostsInfo(basePath, param, error) {
 }
 
 function getAllPostsInfo(cwdPath) {
-    let rawFileNames = childProcess.execSync('find . -type f -printf \'%TY-%Tm-%Td%p\\n\'', {cwd: cwdPath}).toString('utf-8').trim()
+    let rawFileNames = childProcess.execSync('find . -type f -printf \'%TY-%Tm-%Td-%TT%p\\n\'', {cwd: cwdPath}).toString('utf-8').trim()
 
     if(!rawFileNames)
         return []
