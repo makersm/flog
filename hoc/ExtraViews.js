@@ -1,6 +1,6 @@
 import {TableOfContents, Indicator} from '../components'
 
-export const withExtra = (childrenType, MatchComponent, propData) => {
+export const withExtra = (childrenType, MatchComponent, props) => {
     const componentPair = {
         'PostView': TableOfContents,
         'PostNameList': Indicator
@@ -9,8 +9,6 @@ export const withExtra = (childrenType, MatchComponent, propData) => {
     if(componentPair[childrenType] !== MatchComponent) {
         return <div/>
     }
-
-    let props = {context: propData}
 
     return <MatchComponent {...props}/>
 }

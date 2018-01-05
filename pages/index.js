@@ -24,13 +24,13 @@ class Index extends Component {
     }
 
     render() {
-        const {dirJsonTree, errorMsg} = this.props
+        const {dirJsonTree, postInfo, errorMsg} = this.props
         if(errorMsg) return <Error errorMsg={errorMsg}/>
         return (
             <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
                 <PostContainer>
-                    <PostView/>
+                    <PostView postInfo={postInfo}/>
                 </PostContainer>
             </Page>
         )

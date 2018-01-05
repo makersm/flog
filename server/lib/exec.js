@@ -70,29 +70,24 @@ function getDirTree() {
 
 function getPostsInfo(basePath, param, error) {
     let cwdPath = basePath+param
-    console.log(cwdPath)
     let resultObj = childProcess.spawnSync('find',
-        ['.', '-maxdepth', '1', '-type', 'f', '-printf', '%AY-%Am-%Ad%p\n'],
+        ['.', '-maxdepth', '1', '-type', 'f', '-printf', '%TY-%Tm-%Td%p\n'],
         {cwd: cwdPath})
 
-    if(resultObj.error || resultObj.stdout === null) {
-        console.log('error')
+    if(resultObj.error || resultObj.stdout === null)
         return error()
-    }
 
     let rawData = resultObj.stdout.toString('utf-8')
-    console.log(resultObj.stderr.toString('utf-8'))
 
     if(!rawData)
         return []
 
     let fileNamesWithPathAndDate = rawData.split(/[\n]/);
     fileNamesWithPathAndDate = fileNamesWithPathAndDate.filter((line) => {return line.length > 0})
-    console.log(fileNamesWithPathAndDate)
-
     fileNamesWithPathAndDate.sort((a, b) => {
         return a > b ? 1 : -1
     })
+
     let jsonFileNames = []
     fileNamesWithPathAndDate.forEach((line) => {
         let n = line.split('./')
@@ -101,13 +96,11 @@ function getPostsInfo(basePath, param, error) {
             jsonFileNames.push({path: param+'/'+name, name: name})
     })
 
-    console.log(jsonFileNames)
-
     return jsonFileNames
 }
 
 function getAllPostsInfo(cwdPath) {
-    let rawFileNames = childProcess.execSync('find . -type f -printf \'%AY-%Am-%Ad%p\\n\'', {cwd: cwdPath}).toString('utf-8')
+    let rawFileNames = childProcess.execSync('find . -type f -printf \'%TY-%Tm-%Td%p\\n\'', {cwd: cwdPath}).toString('utf-8').trim()
 
     if(!rawFileNames)
         return []
@@ -123,9 +116,9 @@ function getAllPostsInfo(cwdPath) {
         let n = line.split('/')
         let name = n[n.length-1]
 
-        let path = line.split('.')[1]
+        let path = line.split('./')[1]
         if(!imgReg.test(name))
-            jsonFileNames.push({path: path, name: name})
+            jsonFileNames.push({path: '/'+path, name: name})
     })
 
     return jsonFileNames
@@ -147,7 +140,7 @@ function getPostInfo(basePath, param, error) {
     let cwdPath = allPath.split('/'+name)[0]
 
     let resultObj = childProcess.spawnSync('find',
-        ['.', '-maxdepth', '1', '-name', name, '-type', 'f', '-printf', '%AY-%Am-%Ad\n'],
+        ['.', '-maxdepth', '1', '-name', name, '-type', 'f', '-printf', '%TY-%Tm-%Td\n'],
         {cwd: cwdPath})
 
     if(resultObj.error || !resultObj.stdout.toString('utf-8').trim())
@@ -161,7 +154,7 @@ function getPostInfo(basePath, param, error) {
 
 }
 
-function readPost(cwdPath, name, error) {
+function readPost(cwdPath, name, error = ()=>{}) {
     let resultObj = childProcess.spawnSync('rst2html5',
         [name],
         {cwd: cwdPath})
@@ -172,10 +165,25 @@ function readPost(cwdPath, name, error) {
     return resultObj.stdout === null ? '' : resultObj.stdout.toString('utf-8')
 }
 
+function getCurrentPostInfo() {
+    let basePath = getBasePath()
+    let jsonFileNames = getAllPostsInfo(getBasePath())
+
+    let currentPost = jsonFileNames[jsonFileNames.length-1]
+    let cwdPath = basePath + currentPost.path.split('/'+currentPost.name)[0]
+
+    let resultObj = childProcess.spawnSync('find',
+        ['.', '-maxdepth', '1', '-name', currentPost.name, '-type', 'f', '-printf', '%TY-%Tm-%Td\n'],
+        {cwd: cwdPath})
+    let contents = readPost(cwdPath, currentPost.name)
+
+    return {title: currentPost.name, date: resultObj.stdout.toString('utf-8'), contents: contents}
+}
 module.exports = {
     getDirTree,
     getBasePath,
     getPostsInfo,
     getAllPostsInfo,
     getPostInfo,
+    getCurrentPostInfo,
 }

@@ -20,6 +20,7 @@ class Error extends React.Component {
     }
 
     componentDidMount() {
+        console.log('fonst')
         Fonts()
     }
 

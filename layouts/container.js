@@ -48,10 +48,10 @@ class Container extends Component {
                         <Segment>
                             {children}
                         </Segment>
-                        {this.extraComponent(Indicator, 1)}
+                        {this.extraComponent(Indicator, {currentPage: 1})}
                     </Grid.Column>
                     <Grid.Column className='Grids'>
-                        {this.extraComponent(TableOfContents ,contextRef)}
+                        {this.extraComponent(TableOfContents ,{context: contextRef})}
                     </Grid.Column>
                 </Grid>
 

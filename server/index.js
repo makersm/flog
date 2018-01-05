@@ -1,7 +1,7 @@
 const express = require('express')
 const next = require('next')
 
-const { getDirTree, getBasePath, getPostsInfo, getAllPostsInfo, getPostInfo} = require('./lib/exec')
+const { getDirTree, getBasePath, getPostsInfo, getAllPostsInfo, getPostInfo, getCurrentPostInfo} = require('./lib/exec')
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
@@ -10,6 +10,7 @@ const handle = app.getRequestHandler()
 app.prepare()
 .then(() => {
 	const server = express()
+    let imgReg = new RegExp(/\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)$/)
 
     server.get('/_next*', (req, res) => {
         return handle(req, res)
@@ -56,7 +57,6 @@ app.prepare()
         let param = req.originalUrl.split('/post')[1]
         param = decodeURIComponent(param)
         let basePath = getBasePath()
-        let imgReg = new RegExp(/\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)/)
 
         //Defending Semantic URL attack
         let targetPath = basePath+param
@@ -92,10 +92,18 @@ app.prepare()
         }
     })
 
-	server.get('/', (req, res) => {
-        let commonQueryParams = {dirJsonTree: getDirTree()}
+    server.use('/*.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)$', (req, res) => {
+        let basePath = getBasePath()
+        let name = req.originalUrl
+        let postFix = imgReg.exec(name)[1]
+        res.set('Content-Type', `image/${postFix}`)
+        res.sendFile(basePath+name)
+    })
 
-		if(req.get('http_x_requested_with')) {
+	server.get('/', (req, res) => {
+	    let commonQueryParams = {dirJsonTree: getDirTree(), postInfo: getCurrentPostInfo()}
+
+        if(req.get('http_x_requested_with')) {
 		    return res.send(commonQueryParams)
         } else {
             return app.render(req, res, req.originalUrl, commonQueryParams)

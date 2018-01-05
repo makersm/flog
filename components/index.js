@@ -9,6 +9,8 @@ import TableOfContents from './post_main/TableOfContents'
 import Indicator from './category_main/Indicator'
 import PostNameList from './category_main/PostNameList'
 import PostName from './category_main/PostName'
+import ContentsHeaderList from './post_main/ContentsHeaderList'
+import ContentsHeader from './post_main/ContentsHeader'
 
 export {
     Header,
@@ -21,5 +23,7 @@ export {
     TableOfContents,
     Indicator,
     PostNameList,
-    PostName
+    PostName,
+    ContentsHeaderList,
+    ContentsHeader
 }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {SubHeader, ItemList} from '../index'
+import {SubHeader, ItemList, ContentsHeaderList} from '../index'
 import {Sticky, Segment} from 'semantic-ui-react'
 
 const propTypes = {}
@@ -13,13 +13,21 @@ const InlineStyle = () => (
 )
 
 class TableOfContents extends Component {
-
     constructor(props) {
         super(props)
+
+        this.state = {
+            contentsHeaders: []
+        }
+
+    }
+
+    getContentsHeaders() {
     }
 
     render() {
         const {context} = this.props
+        console.log(context)
 
         return (
             <div>
@@ -27,6 +35,7 @@ class TableOfContents extends Component {
                 <Sticky context={context}>
                     <Segment>
                         <SubHeader name='Table Of Contents'/>
+                        {/*<ContentsHeaderList contentsHeaders = {contentsHeaders}/>*/}
                     </Segment>
                 </Sticky>
             </div>
