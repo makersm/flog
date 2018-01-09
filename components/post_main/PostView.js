@@ -1,4 +1,6 @@
 import React, {Component} from 'react'
+const ReactMarkdown = require('react-markdown')
+
 const propTypes = {}
 
 const defaultProps = {}
@@ -14,6 +16,14 @@ const InlineStyle = () => (
 			float:right;
 			display: inline;
 		}
+		.footnotes {
+          -moz-column-count: 2;
+          -webkit-column-count: 2;
+          column-count: 2;
+        }
+        .footnote-item>p {
+          margin-top: 0 !important;
+        }
 	`}</style>
 )
 
@@ -25,6 +35,7 @@ class PostView extends Component {
 
     render() {
         const {postInfo} = this.props
+
         return (
             <div className='Post'>
                 <InlineStyle/>

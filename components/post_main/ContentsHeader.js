@@ -4,8 +4,10 @@ import Link from 'next/link'
 const InlineStyle = () => (
     <style>{`
         .ContentsHeader {
-            cursor: pointer;
-            font-size: 1.2rem;
+            color: gray;
+        }
+        .ContentsHeader a {
+            color: gray;
         }
     `}</style>
 )
@@ -16,10 +18,7 @@ const ContentsHeader = (props) => {
     return (
         <div className='ContentsHeader'>
             <InlineStyle/>
-                <a href={id}>
-                    {name}
-                </a>
-            <hr/>
+                <div dangerouslySetInnerHTML={{__html: name}}/>
         </div>
     );
 };

@@ -29,7 +29,7 @@ class Post extends Component {
         return (
             <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
-                <PostContainer>
+                <PostContainer contents={postInfo.contents}>
                     <PostView postInfo={postInfo}/>
                 </PostContainer>
             </Page>

@@ -1,6 +1,22 @@
 const path = require('path')
 const childProcess = require('child_process')
 const fs = require('fs')
+const md = require('markdown-it')({
+        html: true,
+        linkify: true,
+        typographer: true,
+        breaks:       false,
+    })
+    .use(require('markdown-it-emoji'))
+    .use(require('markdown-it-footnote'))
+    .use(require('markdown-it-sub'))
+    .use(require('markdown-it-sup'))
+    .use(require('markdown-it-abbr'))
+    .use(require('markdown-it-ins'))
+    .use(require('markdown-it-mark'))
+    .use(require('markdown-it-deflist'))
+    .use(require('markdown-it-toc-and-anchor').default)
+
 
 const CONFIG_DIR = [
     '..',
@@ -154,15 +170,19 @@ function getPostInfo(basePath, param, error) {
 
 }
 
+function readFile(cwdPath, name) {
+    const file = path.join(cwdPath, name)
+    const text = fs.readFileSync(file, 'utf-8')
+
+    return text
+}
+
 function readPost(cwdPath, name, error = ()=>{}) {
-    let resultObj = childProcess.spawnSync('rst2html5',
-        [name],
-        {cwd: cwdPath})
+    const text = readFile(cwdPath, name)
+    const html = md.render(text)
 
-    if(resultObj.error)
-        error()
+    return `<article class='markdown-body'>${html}</article>`
 
-    return resultObj.stdout === null ? '' : resultObj.stdout.toString('utf-8')
 }
 
 function getCurrentPostInfo() {

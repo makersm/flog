@@ -8,34 +8,26 @@ const defaultProps = {}
 
 const InlineStyle = () => (
     <style>{`
-
+        .TableOfContents {
+        }
     `}</style>
 )
 
 class TableOfContents extends Component {
     constructor(props) {
         super(props)
-
-        this.state = {
-            contentsHeaders: []
-        }
-
-    }
-
-    getContentsHeaders() {
     }
 
     render() {
-        const {context} = this.props
-        console.log(context)
-
+        const {context, contents} = this.props
         return (
-            <div>
+            <div className='TableOfContents'>
                 <InlineStyle/>
                 <Sticky context={context}>
                     <Segment>
                         <SubHeader name='Table Of Contents'/>
-                        {/*<ContentsHeaderList contentsHeaders = {contentsHeaders}/>*/}
+                        <hr/>
+                        <ContentsHeaderList contents={contents}/>
                     </Segment>
                 </Sticky>
             </div>

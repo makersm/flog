@@ -38,7 +38,7 @@ class Container extends Component {
 
     render() {
         const {contextRef} = this.state
-        const {children} = this.props
+        const {children, contents} = this.props
 
         return (
             <div ref={this.handleContextRef}>
@@ -51,7 +51,7 @@ class Container extends Component {
                         {this.extraComponent(Indicator, {currentPage: 1})}
                     </Grid.Column>
                     <Grid.Column className='Grids'>
-                        {this.extraComponent(TableOfContents ,{context: contextRef})}
+                        {this.extraComponent(TableOfContents ,{context: contextRef, contents: contents})}
                     </Grid.Column>
                 </Grid>
 
