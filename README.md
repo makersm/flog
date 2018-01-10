@@ -60,4 +60,3 @@ post is automatically rendered when you create it based on `markdown`.
 2. Added page indicator function of category
 3. If there is no `root` directory in post / post is not found, treated it as error all show nothing
 4. able to customize ui color and site title
->>>>>>> b6a41800e8eabbafb7878cf8a7a9aa1d56ce3010
