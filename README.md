@@ -14,6 +14,7 @@ post is automatically rendered when you create it based on `markdown`.
  - axios
  - jquery
  - linux cli
+ - github-markdown.css
 
 ### server requirement
 
