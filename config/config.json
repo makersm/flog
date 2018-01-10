@@ -1,5 +1,4 @@
 {
   "blog-name": "MAKER BLOG TEMPLATE",
-  "root": "~/posts",
-  "url": "localhost:3000"
+  "root": "~/posts"
 }

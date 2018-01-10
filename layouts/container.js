@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
-import PropTypes from 'prop-types'
 import {Grid, Segment} from 'semantic-ui-react'
 import {Post, TableOfContents, Indicator} from '../components/index'
 import {withExtra} from '../hoc/ExtraViews'
+import $ from 'jquery'
 
 const propTypes = {}
 
@@ -21,14 +21,64 @@ class Container extends Component {
     constructor(props) {
         super(props)
         this.handleContextRef = this.handleContextRef.bind(this)
+        this.handleScroll = this.handleScroll.bind(this)
+        this.getContentsHeaders = this.getContentsHeaders.bind(this)
         this.state = {
-            contextRef: {}
+            currentHeader: '',
+            contentsHeaders: ''
         }
+    }
+
+    componentDidMount() {
+        window.addEventListener('scroll', this.handleScroll)
+        this.setState({
+            contentsHeaders: this.getContentsHeaders()
+        })
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.handleScroll)
+    }
+
+    getContentsHeaders() {
+        let sections = $(':header')
+        let headers = [], item = {}
+        sections.each(function() {
+            if($(this).attr('id')) {
+                // console.log($(this))
+                item['id'] = $(this).attr('id')
+                item['name'] = $(this).text()
+                headers.push(item)
+                item = {}
+            }
+        })
+        return headers
+    }
+
+    handleScroll(event) {
+        let scrollTop = event.srcElement.scrollingElement.scrollTop
+        let sections = $(':header')
+        let currentSection
+        sections.each(function() {
+            let sectionPosition = $(this).offset().top
+            if(sectionPosition - 1 < scrollTop && $(this).attr('id')){
+                currentSection = $(this)
+            }
+        })
+
+        if(currentSection) {
+            let id = currentSection.attr('id')
+            this.setState({
+                currentHeader: id
+            })
+        }
+
+        // console.log(this.state)
     }
 
     handleContextRef(contextRef) {
         this.setState({
-            contextRef
+            contextRef: contextRef
         })
     }
 
@@ -37,8 +87,8 @@ class Container extends Component {
     }
 
     render() {
-        const {contextRef} = this.state
-        const {children, contents} = this.props
+        const {contextRef, contentsHeaders, currentHeader} = this.state
+        const {children} = this.props
 
         return (
             <div ref={this.handleContextRef}>
@@ -51,7 +101,9 @@ class Container extends Component {
                         {this.extraComponent(Indicator, {currentPage: 1})}
                     </Grid.Column>
                     <Grid.Column className='Grids'>
-                        {this.extraComponent(TableOfContents ,{context: contextRef, contents: contents})}
+                        {this.extraComponent(TableOfContents ,{context: contextRef,
+                            contentsHeaders: contentsHeaders,
+                            currentHeader: currentHeader})}
                     </Grid.Column>
                 </Grid>
 

@@ -15,7 +15,7 @@ const InlineStyle = () => (
 
 class Error extends React.Component {
     static getInitialProps({errorMsg, res, err}) {
-        const statusCode = res ? res.statusCode : err ? err.statusCode : null;
+        const statusCode = res ? res.statusCode : err ? err.statusCode : null
         return {statusCode, errorMsg}
     }
 

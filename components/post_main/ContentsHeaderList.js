@@ -29,75 +29,27 @@ const InlineStyle = () => (
     `}</style>
 )
 
-const defaultProps = {
-}
-
-
 class ContentsHeaderList extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            contentsHeaders: []
-        }
-
-        this.divideContentsByHeader = this.divideContentsByHeader.bind(this)
-    }
-
-    divideContentsByHeader(contents) {
-        let findHeader = new RegExp(/<h[1-6] id="[^"]*">.*<\/h[1-6]>/g)
-        let unnecessaryAtag = new RegExp(/<a href="[^"]*">/)
-        let match, matchesList = []
-        while((match = findHeader.exec(contents)) !== null){
-            let matches = {}
-            let matchString = ''
-            if(unnecessaryAtag.test(match)){
-                let matchSplit = match[0].split(/<a href="[^"]*">/)
-                matchString = matchSplit.reduce((a, b) => {
-                    return a + b
-                })
-                matchSplit = matchString.split(/<\/a>/)
-                matchString = matchSplit.reduce((a, b) => {
-                    return a + b
-                })
-            } else
-                matchString = match[0]
-
-            let href = matchString.split(/<h[1-6] id="[^"]*"><a class="[^"]*" href="/)
-
-            matches.name = matchString
-            matches.href = href[0]
-
-            matchesList.push(matches)
-        }
-        this.setState({
-            contentsHeaders: matchesList
-        })
-        console.log(this.state.contentsHeaders)
-    }
-
-    componentDidMount() {
-        this.divideContentsByHeader(this.props.contents)
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if(nextProps !== this.props)
-            this.divideContentsByHeader(nextProps.contents)
     }
 
     render() {
-        // const {contents} = this.props
-        const {contentsHeaders} = this.state
-        console.log(contentsHeaders)
+        const {currentHeader, contentsHeaders} = this.props
+        let match = contentsHeaders ? contentsHeaders.map((contentsHeader) => {
+                if(contentsHeader.id === currentHeader) {
+                    return <ContentsHeader name={contentsHeader.name} key={contentsHeader.id} id={contentsHeader.id}
+                                           focus={true}/>
+                }
+                return <ContentsHeader name={contentsHeader.name} key={contentsHeader.id} id={contentsHeader.id}/>
+            }) : currentHeader
         return (
             <div className='ContentsHeaderList'>
                 <InlineStyle/>
-                {contentsHeaders.map((contentsHeader) => {
-                    return <ContentsHeader name={contentsHeader.name} key={contentsHeader.name} id={contentsHeader.name}/>
-                })}
+                {match}
             </div>
         )
     }
-};
+}
 
-ContentsHeaderList.defaultProps = defaultProps
 export default ContentsHeaderList

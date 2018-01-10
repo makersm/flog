@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import Fonts from '../static/Fonts'
 import Page from '../layouts/main'
 import PostListContainer from '../layouts/container'
@@ -43,13 +43,12 @@ Category.getInitialProps = async function (context) {
     else {
         const config = {headers: {'http_x_requested_with': 'axios'}}
 
-        //TODO how to set url and basepath
-        const url = 'http://localhost:3000'
         const pathName = context.pathname
-        const id = context.query.path
-        console.log(`${url}${pathName}${id}`)
+        let id = context.query.path
+        if(!id)
+            id = '/'
 
-        const responseData = axios.get(`${url}${pathName}${id}`, config)
+        const responseData = axios.get(`${pathName}${id}`, config)
             .then((response) => {return response.data})
             .catch(err => {
                 console.error(err)
@@ -60,4 +59,4 @@ Category.getInitialProps = async function (context) {
     }
 }
 
-export default Category;
+export default Category

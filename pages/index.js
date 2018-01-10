@@ -29,7 +29,7 @@ class Index extends Component {
         return (
             <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
-                <PostContainer contents={postInfo.contents}>
+                <PostContainer>
                     <PostView postInfo={postInfo}/>
                 </PostContainer>
             </Page>
@@ -42,10 +42,8 @@ Index.getInitialProps = async function (context) {
         return context.query
     else {
         const config = {headers: {'http_x_requested_with': 'axios'}}
-        //TODO how to set url and basepath
-        const url = 'http://localhost:3000'
 
-        const responseData = axios.get(`${url}`, config)
+        const responseData = axios.get(``, config)
             .then((response) => {return response.data})
             .catch(err => {
                 console.error(err)

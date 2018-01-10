@@ -10,6 +10,7 @@ const InlineStyle = () => (
 )
 
 class SearchBar extends Component {
+    //TODO generate indicator at 1.1
     constructor(props) {
         super(props)
     }

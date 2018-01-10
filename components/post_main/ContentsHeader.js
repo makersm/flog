@@ -1,5 +1,4 @@
-import React from 'react'
-import Link from 'next/link'
+import React, {Component} from 'react'
 
 const InlineStyle = () => (
     <style>{`
@@ -9,19 +8,59 @@ const InlineStyle = () => (
         .ContentsHeader a {
             color: gray;
         }
+        .focus a {
+            color: black;
+        }
     `}</style>
 )
 
+const defaultProps = {
+    focus: false
+}
 
-const ContentsHeader = (props) => {
-    const {name, id} = props
-    return (
-        <div className='ContentsHeader'>
-            <InlineStyle/>
-                <div dangerouslySetInnerHTML={{__html: name}}/>
-        </div>
-    );
-};
+class ContentsHeader extends Component{
+    constructor(props) {
+        super(props)
+        this.state = {
+            className: 'ContentsHeader'
+        }
+        this.setClassName = this.setClassName.bind(this)
+    }
+
+    setClassName(nextProps = this.props){
+        if(nextProps.focus) {
+            this.setState({
+                className: 'focus'
+            })
+        } else {
+            this.setState({
+                className: 'ContentsHeader'
+            })
+        }
+    }
+
+    componentDidMount() {
+        this.setClassName()
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setClassName(nextProps)
+    }
+
+    render() {
+        const {className} = this.state
+        const {name, id} = this.props
+        return (
+            <div className={className}>
+                <InlineStyle/>
+                <a href={`#${id}`}>
+                    {name}
+                </a>
+            </div>
+        )
+    }
+}
 
 
+ContentsHeader.defaultProps = defaultProps
 export default ContentsHeader

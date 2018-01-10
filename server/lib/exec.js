@@ -5,7 +5,7 @@ const md = require('markdown-it')({
         html: true,
         linkify: true,
         typographer: true,
-        breaks:       false,
+        breaks: false,
     })
     .use(require('markdown-it-emoji'))
     .use(require('markdown-it-footnote'))
@@ -16,6 +16,7 @@ const md = require('markdown-it')({
     .use(require('markdown-it-mark'))
     .use(require('markdown-it-deflist'))
     .use(require('markdown-it-toc-and-anchor').default)
+    .use(require('markdown-it-header-sections'))
 
 
 const CONFIG_DIR = [
@@ -98,7 +99,7 @@ function getPostsInfo(basePath, param, error) {
     if(!rawData)
         return []
 
-    let fileNamesWithPathAndDate = rawData.split(/[\n]/);
+    let fileNamesWithPathAndDate = rawData.split(/[\n]/)
     fileNamesWithPathAndDate = fileNamesWithPathAndDate.filter((line) => {return line.length > 0})
     fileNamesWithPathAndDate.sort((a, b) => {
         return a > b ? 1 : -1

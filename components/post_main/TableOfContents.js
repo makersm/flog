@@ -2,10 +2,6 @@ import React, {Component} from 'react'
 import {SubHeader, ItemList, ContentsHeaderList} from '../index'
 import {Sticky, Segment} from 'semantic-ui-react'
 
-const propTypes = {}
-
-const defaultProps = {}
-
 const InlineStyle = () => (
     <style>{`
         .TableOfContents {
@@ -19,7 +15,7 @@ class TableOfContents extends Component {
     }
 
     render() {
-        const {context, contents} = this.props
+        const {context, currentHeader, contentsHeaders} = this.props
         return (
             <div className='TableOfContents'>
                 <InlineStyle/>
@@ -27,7 +23,7 @@ class TableOfContents extends Component {
                     <Segment>
                         <SubHeader name='Table Of Contents'/>
                         <hr/>
-                        <ContentsHeaderList contents={contents}/>
+                        <ContentsHeaderList currentHeader={currentHeader} contentsHeaders={contentsHeaders}/>
                     </Segment>
                 </Sticky>
             </div>
@@ -35,8 +31,5 @@ class TableOfContents extends Component {
         );
     }
 }
-
-TableOfContents.propTypes = propTypes
-TableOfContents.defaultProps = defaultProps
 
 export default TableOfContents

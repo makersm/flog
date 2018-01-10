@@ -29,7 +29,7 @@ class Post extends Component {
         return (
             <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
-                <PostContainer contents={postInfo.contents}>
+                <PostContainer>
                     <PostView postInfo={postInfo}/>
                 </PostContainer>
             </Page>
@@ -43,13 +43,10 @@ Post.getInitialProps = async function (context) {
     else {
         const config = {headers: {'http_x_requested_with': 'axios'}}
 
-        //TODO how to set url and basepath
-        const url = 'http://localhost:3000'
         const pathName = context.pathname
         const id = context.query.path
-        console.log(`${url}${pathName}${id}`)
 
-        const responseData = axios.get(`${url}${pathName}${id}`, config)
+        const responseData = axios.get(`${pathName}${id}`, config)
             .then((response) => {return response.data})
             .catch(err => {
                 console.error(err)

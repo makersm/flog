@@ -1,9 +1,6 @@
 import React, {Component} from 'react'
-const ReactMarkdown = require('react-markdown')
 
-const propTypes = {}
 
-const defaultProps = {}
 const InlineStyle = () => (
     <style>{`
 		.Post .Title {
@@ -47,8 +44,5 @@ class PostView extends Component {
         );
     }
 }
-
-PostView.propTypes = propTypes;
-PostView.defaultProps = defaultProps;
 
 export default PostView;

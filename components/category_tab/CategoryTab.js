@@ -18,20 +18,20 @@ class CategoryTab extends Component{
     constructor(props){
         super(props)
         this.state = { width: '0', height: '0' };
-        this.updateDocumentDimensions = this.updateDocumentDimensions.bind(this);
+        this.updateDocumentDimensions = this.updateDocumentDimensions.bind(this)
     }
 
     componentDidMount() {
         this.updateDocumentDimensions();
-        document.addEventListener('resize', this.updateDocumentDimensions);
+        document.addEventListener('resize', this.updateDocumentDimensions)
     }
 
     componentWillUnmount() {
-        document.removeEventListener('resize', this.updateDocumentDimensions);
+        document.removeEventListener('resize', this.updateDocumentDimensions)
     }
 
     updateDocumentDimensions() {
-        this.setState({ width: document.body.scrollwidth, height: document.body.scrollHeight});
+        this.setState({ width: document.body.scrollwidth, height: document.body.scrollHeight})
     }
 
     render() {
