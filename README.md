@@ -15,6 +15,7 @@ post is automatically rendered when you create it based on `markdown`.
  - jquery
  - linux cli
  - github-markdown.css
+ - fontfaceobserver
 
 ### server requirement
 
