@@ -11,30 +11,24 @@ const InlineStyle = () => (
             margin-top: 20rem;
         }
     `}</style>
-)
+);
 
 class Error extends React.Component {
-    static getInitialProps({errorMsg, res, err}) {
-        const statusCode = res ? res.statusCode : err ? err.statusCode : null
-        return {statusCode, errorMsg}
-    }
-
     componentDidMount() {
-        Fonts()
+        Fonts();
     }
 
     render() {
+        const {statusCode, errorMsg} = this.props;
         return (
             <div>
                 <InlineStyle/>
                 <Header name="MAKER BLOG TEMPLATE"/>
                 <div className="display-center">
                     <Icon name="exclamation"/>
-                    <h1>{this.props.errorMsg
-                        ? `${this.props.errorMsg}` : this.props.statusCode
-                        ? `An ${this.props.statusCode} error occurred on server`
-                        : 'An error occurred on client'}
-
+                    <h1>{!statusCode ? 'An error occurred on client' :
+                            errorMsg ? `${statusCode} : ${errorMsg}` :
+                            `An ${statusCode} error occurred on server` }
                     </h1>
                 </div>
             </div>
@@ -42,4 +36,10 @@ class Error extends React.Component {
     }
 }
 
-export default Error
+Error.getInitialProps = async function ({res, err}) {
+    const statusCode = err ? err.code : res ? res.statusCode : null;
+    const errorMsg = err ? err.message : null;
+    return {statusCode, errorMsg};
+};
+
+export default Error;

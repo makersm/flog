@@ -92,12 +92,20 @@ app.prepare()
     })
 
 	server.get('/', (req, res) => {
-	    let commonQueryParams = {dirJsonTree: getDirTree(), postInfo: getCurrentPostInfo()}
+	    let dirJsonTree = getDirTree();
+
+        if(dirJsonTree instanceof Error) {
+	        res.statusCode = dirJsonTree.code;
+	        res.statusMessage = dirJsonTree.message;
+            return app.renderError(null, req, res, '/', {err: dirJsonTree});
+        }
+
+	    let commonQueryParams = {dirJsonTree: dirJsonTree, postInfo: getCurrentPostInfo()};
 
         if(req.get('http_x_requested_with')) {
-		    return res.send(commonQueryParams)
+		    return res.send(commonQueryParams);
         } else {
-            return app.render(req, res, req.originalUrl, commonQueryParams)
+            return app.render(req, res, req.originalUrl, commonQueryParams);
         }
 	})
 

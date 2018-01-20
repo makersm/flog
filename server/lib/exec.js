@@ -75,21 +75,29 @@ function getBasePath() {
 }
 
 function getDirTree() {
-    const basePath = getBasePath()
+    const basePath = getBasePath();
 
-    let tree = childProcess.execSync('tree -J', {cwd: basePath}).toString('utf-8')
-    let jsonTree = JSON.parse(tree)
-    let jsonDirTree = JSONDirfilter(jsonTree)
-    jsonDirTree[0]['contents'].push({type: 'all', name: 'all', fileCount: getAllPostsCount(basePath), contents: []})
+    let resultObj = childProcess.spawnSync('tree', ['-J'], {cwd: basePath});
 
-    return jsonDirTree[0]['contents']
+    if(resultObj.error) {
+        let error = new Error();
+        error.code = 500;
+        return error;
+    }
+
+    let tree = resultObj.stdout.toString('utf-8');
+    let jsonTree = JSON.parse(tree);
+    let jsonDirTree = JSONDirfilter(jsonTree);
+    jsonDirTree[0]['contents'].push({type: 'all', name: 'all', fileCount: getAllPostsCount(basePath), contents: []});
+
+    return jsonDirTree[0]['contents'];
 }
 
 function getPostsInfo(basePath, param, error) {
-    let cwdPath = basePath+param
+    let cwdPath = basePath+param;
     let resultObj = childProcess.spawnSync('find',
         ['.', '-maxdepth', '1', '-type', 'f', '-printf', '%TY-%Tm-%Td-%TT%p\n'],
-        {cwd: cwdPath})
+        {cwd: cwdPath});
 
     if(resultObj.error || resultObj.stdout === null)
         return error()
@@ -187,19 +195,22 @@ function readPost(cwdPath, name, error = ()=>{}) {
 }
 
 function getCurrentPostInfo() {
-    let basePath = getBasePath()
-    let jsonFileNames = getAllPostsInfo(getBasePath())
+    let basePath = getBasePath();
+    let jsonFileNames = getAllPostsInfo(basePath);
 
-    let currentPost = jsonFileNames[jsonFileNames.length-1]
-    let cwdPath = basePath + currentPost.path.split('/'+currentPost.name)[0]
+    let currentPost = jsonFileNames[jsonFileNames.length-1];
+    if(!currentPost)
+        return {title: '', date: '', contents: ''};
+    let cwdPath = basePath + currentPost.path.split('/'+currentPost.name)[0];
 
     let resultObj = childProcess.spawnSync('find',
         ['.', '-maxdepth', '1', '-name', currentPost.name, '-type', 'f', '-printf', '%TY-%Tm-%Td\n'],
-        {cwd: cwdPath})
-    let contents = readPost(cwdPath, currentPost.name)
+        {cwd: cwdPath});
+    let contents = readPost(cwdPath, currentPost.name);
 
-    return {title: currentPost.name, date: resultObj.stdout.toString('utf-8'), contents: contents}
+    return {title: currentPost.name, date: resultObj.stdout.toString('utf-8'), contents: contents};
 }
+
 module.exports = {
     getDirTree,
     getBasePath,

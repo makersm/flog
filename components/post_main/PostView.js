@@ -22,16 +22,23 @@ const InlineStyle = () => (
           margin-top: 0 !important;
         }
 	`}</style>
-)
+);
+
+const defaultProps = {
+    postInfo: {
+        title : '',
+        date: '',
+        contents: ''
+    }
+};
 
 class PostView extends Component {
-
     constructor(props) {
         super(props)
     }
 
     render() {
-        const {postInfo} = this.props
+        const {postInfo} = this.props;
 
         return (
             <div className='Post'>
@@ -45,4 +52,5 @@ class PostView extends Component {
     }
 }
 
+PostView.defaultProps = defaultProps;
 export default PostView;

@@ -12,20 +12,20 @@ const InlineStyle = () => (
 			background: #E0E0E0;
 		}
 	`}</style>
-)
+);
 
 class Index extends Component {
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     componentDidMount() {
-        Fonts()
+        Fonts();
     }
 
     render() {
-        const {dirJsonTree, postInfo, errorMsg} = this.props
-        if(errorMsg) return <Error errorMsg={errorMsg}/>
+        const {dirJsonTree, postInfo, statusCode, errorMsg} = this.props;
+        if(statusCode > 400) return <Error statusCode={statusCode} errorMsg={errorMsg}/>;
         return (
             <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
@@ -37,20 +37,28 @@ class Index extends Component {
     }
 }
 
-Index.getInitialProps = async function (context) {
-    if(context.query['dirJsonTree'] && context.query['dirJsonTree'][0])
-        return context.query
-    else {
-        const config = {headers: {'http_x_requested_with': 'axios'}}
+function varify(query) {
+    return 'dirJsonTree' in query && query['dirJsonTree'][0] && 'postInfo' in query;
+}
 
-        const responseData = axios.get(``, config)
-            .then((response) => {return response.data})
-            .catch(err => {
-                console.error(err)
-                return {errorMsg: err}
+Index.getInitialProps = async function(context) {
+    if(varify(context.query)) {
+        if(context.query.err)
+            return {statusCode: context.query.err.code, errorMsg: context.query.err.message};
+        return context.query;
+    } else {
+        const config = {headers: {'http_x_requested_with': 'axios'}};
+
+        const responseData = axios.get('', config)
+            .then((response) => {
+                return response.data;
             })
+            .catch(err => {
+                console.error(`hihi :${err.code}`);
+                return {statusCode: err.code, errorMsg: err.message};
+            });
 
-        return responseData
+        return responseData;
     }
 }
 
