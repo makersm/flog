@@ -2,11 +2,11 @@ const path = require('path');
 const childProcess = require('child_process');
 const fs = require('fs');
 const md = require('markdown-it')({
-        html: true,
-        linkify: true,
-        typographer: true,
-        breaks: false,
-    })
+    html: true,
+    linkify: true,
+    typographer: true,
+    breaks: false,
+})
     .use(require('markdown-it-emoji'))
     .use(require('markdown-it-footnote'))
     .use(require('markdown-it-sub'))
@@ -28,7 +28,7 @@ const CONFIG_DIR = [
 const imgReg = new RegExp(/\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)$/);
 
 function absolutePath(path, cwdPath) {
-    path = `realpath ${ path }`;
+    path = `readlink -f ${ path }`;
     let result;
 
     if (cwdPath)
@@ -56,7 +56,7 @@ function JSONDirfilter(jsonTree) {
             });
             data['fileCount'] = fileCount.length;
 
-            if(data['contents'].length !== 0)
+            if (data['contents'].length !== 0)
                 JSONDirfilter(data['contents']);
         } else if (data.type !== 'directory') {
             jsonTree.splice(index, 1);
@@ -79,7 +79,7 @@ function getDirTree() {
 
     let resultObj = childProcess.spawnSync('tree', ['-J'], {cwd: basePath});
 
-    if(resultObj.error) {
+    if (resultObj.error) {
         let error = new Error();
         error.code = 500;
         return error;
@@ -100,7 +100,7 @@ function getPostsInfo(basePath, param) {
         ['.', '-maxdepth', '1', '-type', 'f', '-printf', '%TY-%Tm-%Td-%TT%p\n'],
         {cwd: cwdPath});
 
-    if(resultObj.error || resultObj.stdout === null) {
+    if (resultObj.error || resultObj.stdout === null) {
         let error = new Error();
         error.code = 404;
         return error;
@@ -108,11 +108,13 @@ function getPostsInfo(basePath, param) {
 
     let rawData = resultObj.stdout.toString('utf-8');
 
-    if(!rawData)
+    if (!rawData)
         return [];
 
     let fileNamesWithPathAndDate = rawData.split(/[\n]/);
-    fileNamesWithPathAndDate = fileNamesWithPathAndDate.filter((line) => {return line.length > 0});
+    fileNamesWithPathAndDate = fileNamesWithPathAndDate.filter((line) => {
+        return line.length > 0
+    });
     fileNamesWithPathAndDate.sort((a, b) => {
         return a > b ? 1 : -1;
     });
@@ -121,7 +123,7 @@ function getPostsInfo(basePath, param) {
     fileNamesWithPathAndDate.forEach((line) => {
         let n = line.split('./');
         let name = n[1];
-        if(!imgReg.test(name))
+        if (!imgReg.test(name))
             jsonFileNames.push({path: path.join(param, name), name: name});
     });
 
@@ -133,18 +135,20 @@ function getAllPostsInfo(cwdPath) {
         ['.', '-type', 'f', '-printf', '%TY-%Tm-%Td-%TT%p\n'],
         {cwd: cwdPath});
 
-    if(returnObj.error) {
+    if (returnObj.error) {
         let error = new Error();
         error.code = 500;
         return error;
     }
 
-    if(!returnObj.stdout) {
+    if (!returnObj.stdout) {
         return [];
     }
 
     let fileNamesWithPathAndDate = returnObj.stdout.toString('utf-8').split(/[\n]/);
-    fileNamesWithPathAndDate = fileNamesWithPathAndDate.filter((line) => {return line.length > 0});
+    fileNamesWithPathAndDate = fileNamesWithPathAndDate.filter((line) => {
+        return line.length > 0
+    });
     fileNamesWithPathAndDate.sort((a, b) => {
         return a > b ? 1 : -1;
     });
@@ -152,10 +156,10 @@ function getAllPostsInfo(cwdPath) {
     let jsonFileNames = [];
     fileNamesWithPathAndDate.forEach((line) => {
         let n = line.split('/');
-        let name = n[n.length-1];
+        let name = n[n.length - 1];
 
         let cpath = line.split('./')[1];
-        if(!imgReg.test(name))
+        if (!imgReg.test(name))
             jsonFileNames.push({path: path.join('/', cpath), name: name});
     });
 
@@ -166,7 +170,9 @@ function getAllPostsCount(cwdPath) {
     let rawFileNames = childProcess.execSync('find . -type f', {cwd: cwdPath}).toString('utf-8');
     let fileNames = rawFileNames.split('\n');
 
-    fileNames = fileNames.filter((name) => {return name.length > 0 && !imgReg.test(name)});
+    fileNames = fileNames.filter((name) => {
+        return name.length > 0 && !imgReg.test(name)
+    });
 
     return fileNames.length;
 }
@@ -174,14 +180,14 @@ function getAllPostsCount(cwdPath) {
 function getPostInfo(basePath, param) {
     let allPath = path.join(basePath, param);
     let n = param.split('/');
-    let name = n[n.length-1];
+    let name = n[n.length - 1];
     let cwdPath = allPath.split(/\/[^\/]*$/)[0];
 
     let resultObj = childProcess.spawnSync('find',
         ['.', '-maxdepth', '1', '-name', name, '-type', 'f', '-printf', '%TY-%Tm-%Td\n'],
         {cwd: cwdPath});
 
-    if(resultObj.error || !resultObj.stdout.toString('utf-8').trim()){
+    if (resultObj.error || !resultObj.stdout.toString('utf-8').trim()) {
         let error = new Error();
         error.code = 404;
         return error;
@@ -212,12 +218,12 @@ function readPost(cwdPath, name) {
 function getCurrentPostInfo() {
     let basePath = getBasePath();
     let jsonFileNames = getAllPostsInfo(basePath);
-    if(jsonFileNames instanceof Error)
+    if (jsonFileNames instanceof Error)
         return jsonFileNames;
 
-    let currentPost = jsonFileNames[jsonFileNames.length-1];
+    let currentPost = jsonFileNames[jsonFileNames.length - 1];
 
-    if(!currentPost)
+    if (!currentPost)
         return {title: '', date: '', contents: ''};
 
     let cwdPath = path.join(basePath, currentPost.path).split(/\/[^\/]*$/)[0];

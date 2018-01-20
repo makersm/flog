@@ -13,11 +13,11 @@ const InlineStyle = () => (
 	`}</style>
 );
 
-class CategoryTab extends Component{
+class CategoryTab extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state = { width: 0, height: 0 };
+        this.state = {width: 0, height: 0};
         this.updateDocumentDimensions = this.updateDocumentDimensions.bind(this);
     }
 
@@ -31,7 +31,10 @@ class CategoryTab extends Component{
     }
 
     updateDocumentDimensions() {
-        this.setState({ width: window.document.scrollingElement.scrollWidth, height: window.document.scrollingElement.scrollHeight});
+        this.setState({
+            width: window.document.scrollingElement.scrollWidth,
+            height: window.document.scrollingElement.scrollHeight
+        });
     }
 
     render() {

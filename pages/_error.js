@@ -23,8 +23,8 @@ class Error extends React.Component {
                 <div className="display-center">
                     <Icon name="exclamation"/>
                     <h1>{!statusCode ? 'An error occurred on client' :
-                            errorMsg ? `${statusCode} : ${errorMsg}` :
-                            `An ${statusCode} error occurred on server` }
+                        errorMsg ? `${statusCode} : ${errorMsg}` :
+                            `An ${statusCode} error occurred on server`}
                     </h1>
                 </div>
             </div>

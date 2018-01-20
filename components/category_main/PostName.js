@@ -16,7 +16,7 @@ const PostName = (props) => {
     return (
         <div className='PostName'>
             <InlineStyle/>
-            <Link prefetch href={{ pathname: '/post', query: { path: id }}} as={`/post${id}`}>
+            <Link prefetch href={{pathname: '/post', query: {path: id}}} as={`/post${id}`}>
                 <a>
                     {name}
                 </a>

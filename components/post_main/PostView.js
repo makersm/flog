@@ -25,7 +25,7 @@ const InlineStyle = () => (
 
 const defaultProps = {
     postInfo: {
-        title : '',
+        title: '',
         date: '',
         contents: ''
     }

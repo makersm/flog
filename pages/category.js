@@ -21,7 +21,7 @@ class Category extends Component {
 
     render() {
         const {dirJsonTree, postsInfo, statusCode, errorMsg} = this.props;
-        if(statusCode >= 400) return <Error statusCode={statusCode} errorMsg={errorMsg}/>;
+        if (statusCode >= 400) return <Error statusCode={statusCode} errorMsg={errorMsg}/>;
         return (
             <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
@@ -38,15 +38,15 @@ function verify(query) {
 }
 
 Category.getInitialProps = async function (context) {
-    if(verify(context.query)) {
-        if(context.query.err)
+    if (verify(context.query)) {
+        if (context.query.err)
             return {statusCode: context.query.err.code, errorMsg: context.query.err.message};
         return context.query;
     } else {
         const config = {headers: {'http_x_requested_with': 'axios'}};
         const pathName = context.pathname;
         let id = context.query.path;
-        if(!id)
+        if (!id)
             id = '/';
 
         const responseData = axios.get(`${pathName}${id}`, config)

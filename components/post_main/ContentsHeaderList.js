@@ -37,12 +37,12 @@ class ContentsHeaderList extends Component {
     render() {
         const {currentHeaderId, contentsHeaders} = this.props;
         let match = contentsHeaders ? contentsHeaders.map((contentsHeader) => {
-                if(contentsHeader.id === currentHeaderId) {
-                    return <ContentsHeader name={contentsHeader.name} key={contentsHeader.id} id={contentsHeader.id}
-                                           focus={true}/>
-                }
-                return <ContentsHeader name={contentsHeader.name} key={contentsHeader.id} id={contentsHeader.id}/>
-            }) : currentHeaderId;
+            if (contentsHeader.id === currentHeaderId) {
+                return <ContentsHeader name={contentsHeader.name} key={contentsHeader.id} id={contentsHeader.id}
+                                       focus={true}/>
+            }
+            return <ContentsHeader name={contentsHeader.name} key={contentsHeader.id} id={contentsHeader.id}/>
+        }) : currentHeaderId;
         return (
             <div className='ContentsHeaderList'>
                 <InlineStyle/>

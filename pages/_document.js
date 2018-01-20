@@ -1,22 +1,22 @@
-import Document, { Head, Main, NextScript } from 'next/document'
+import Document, {Head, Main, NextScript} from 'next/document'
 import flush from 'styled-jsx/server'
 
 class CustomDocument extends Document {
-    static getInitialProps({ renderPage }) {
-        const { html, head, errorHtml, chunks } = renderPage()
+    static getInitialProps({renderPage}) {
+        const {html, head, errorHtml, chunks} = renderPage()
         const styles = flush()
-        return { html, head, errorHtml, chunks, styles }
+        return {html, head, errorHtml, chunks, styles}
     }
 
     render() {
         return (
             <html>
-                <Head>
-                    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css'/>
-                    <link rel="stylesheet" href="/static/github-markdown.css"/>
-                    <link href="https://fonts.googleapis.com/css?family=Kalam" rel="stylesheet"/>
+            <Head>
+                <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css'/>
+                <link rel="stylesheet" href="/static/github-markdown.css"/>
+                <link href="https://fonts.googleapis.com/css?family=Kalam" rel="stylesheet"/>
 
-                    <style>{`
+                <style>{`
                         .markdown-body {
                             box-sizing: border-box;
                             min-width: 200px;
@@ -35,11 +35,11 @@ class CustomDocument extends Document {
 		                    color: black;
 		                }
                     `}</style>
-                </Head>
-                <body>
-                    <Main />
-                    <NextScript />
-                </body>
+            </Head>
+            <body>
+            <Main/>
+            <NextScript/>
+            </body>
             </html>
         )
     }

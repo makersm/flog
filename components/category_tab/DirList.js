@@ -29,9 +29,10 @@ class DirList extends Component {
                     </div>
                 );
             } else {
-                if(dir.type !== 'all')
+                if (dir.type !== 'all')
                     return (
-                        <Dir name={dir.name} count={dir.fileCount} key={path + '/' + dir.name} id={path + '/' + dir.name}/>
+                        <Dir name={dir.name} count={dir.fileCount} key={path + '/' + dir.name}
+                             id={path + '/' + dir.name}/>
                     );
             }
         })
@@ -39,7 +40,7 @@ class DirList extends Component {
 
     getAllComponent(jsonTree) {
         return jsonTree.map(dir => {
-            if(dir.type === 'all')
+            if (dir.type === 'all')
                 return (
                     <Dir name={dir.name} count={dir.fileCount} key={'/'} id={'/'}/>
                 );

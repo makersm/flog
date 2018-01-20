@@ -15,7 +15,8 @@ class SearchBar extends Component {
         super(props);
     }
 
-    buttonClick = () => {}
+    buttonClick = () => {
+    }
 
     render() {
         return (

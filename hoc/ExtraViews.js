@@ -6,7 +6,7 @@ export const withExtra = (childrenType, MatchComponent, props) => {
         'PostNameList': Indicator
     };
 
-    if(componentPair[childrenType] !== MatchComponent) {
+    if (componentPair[childrenType] !== MatchComponent) {
         return <div/>;
     }
 

@@ -43,8 +43,8 @@ class Container extends Component {
     getContentsHeaders() {
         let sections = $(':header');
         let headers = [], item = {};
-        sections.each(function() {
-            if($(this).attr('id')) {
+        sections.each(function () {
+            if ($(this).attr('id')) {
                 item['id'] = $(this).attr('id');
                 item['name'] = $(this).text();
                 headers.push(item);
@@ -58,14 +58,14 @@ class Container extends Component {
         let scrollTop = event.srcElement.scrollingElement.scrollTop;
         let sections = $(':header');
         let currentSection;
-        sections.each(function() {
+        sections.each(function () {
             let sectionPosition = $(this).offset().top;
-            if(sectionPosition - 1 < scrollTop && $(this).attr('id')){
+            if (sectionPosition - 1 < scrollTop && $(this).attr('id')) {
                 currentSection = $(this);
             }
         });
 
-        if(currentSection) {
+        if (currentSection) {
             let id = currentSection.attr('id');
             this.setState({
                 currentHeaderId: id
@@ -99,9 +99,11 @@ class Container extends Component {
                     </Grid.Column>
                     <Grid.Column className='Grids'>
                         {this.extraComponent(TableOfContents,
-                            {context: contextRef,
-                            contentsHeaders: contentsHeaders,
-                            currentHeaderId: currentHeaderId})}
+                            {
+                                context: contextRef,
+                                contentsHeaders: contentsHeaders,
+                                currentHeaderId: currentHeaderId
+                            })}
                     </Grid.Column>
                 </Grid>
             </div>

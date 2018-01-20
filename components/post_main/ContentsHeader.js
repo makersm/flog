@@ -18,7 +18,7 @@ const defaultProps = {
     focus: false
 };
 
-class ContentsHeader extends Component{
+class ContentsHeader extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -27,8 +27,8 @@ class ContentsHeader extends Component{
         this.setClassName = this.setClassName.bind(this);
     }
 
-    setClassName(nextProps = this.props){
-        if(nextProps.focus) {
+    setClassName(nextProps = this.props) {
+        if (nextProps.focus) {
             this.setState({
                 className: 'focus'
             });

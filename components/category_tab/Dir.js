@@ -29,12 +29,12 @@ class Dir extends Component {
         return (
             <div>
                 <InlineStyle/>
-                <Link href={{ pathname: '/category', query: { path: id }}} as={`/category${id}`}>
-                <li>
-                    <a>
-                        {name} <span className="count">[{count}]</span>
-                    </a>
-                </li>
+                <Link href={{pathname: '/category', query: {path: id}}} as={`/category${id}`}>
+                    <li>
+                        <a>
+                            {name} <span className="count">[{count}]</span>
+                        </a>
+                    </li>
                 </Link>
             </div>
         );

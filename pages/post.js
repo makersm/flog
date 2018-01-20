@@ -21,7 +21,7 @@ class Post extends Component {
 
     render() {
         const {dirJsonTree, postInfo, statusCode, errorMsg} = this.props;
-        if(statusCode >= 400) return <Error statusCode={statusCode} errorMsg={errorMsg}/>;
+        if (statusCode >= 400) return <Error statusCode={statusCode} errorMsg={errorMsg}/>;
         return (
             <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
@@ -39,8 +39,8 @@ function verify(query) {
 }
 
 Post.getInitialProps = async function (context) {
-    if(verify(context.query)) {
-        if(context.query.err)
+    if (verify(context.query)) {
+        if (context.query.err)
             return {statusCode: context.query.err.code, errorMsg: context.query.err.message};
         return context.query;
     } else {
