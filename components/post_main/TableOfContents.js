@@ -15,7 +15,7 @@ class TableOfContents extends Component {
     }
 
     render() {
-        const {context, currentHeader, contentsHeaders} = this.props;
+        const {context, currentHeaderId, contentsHeaders} = this.props;
         return (
             <div className='TableOfContents'>
                 <InlineStyle/>
@@ -23,7 +23,7 @@ class TableOfContents extends Component {
                     <Segment>
                         <SubHeader name='Table Of Contents'/>
                         <hr/>
-                        <ContentsHeaderList currentHeader={currentHeader} contentsHeaders={contentsHeaders}/>
+                        <ContentsHeaderList currentHeaderId={currentHeaderId} contentsHeaders={contentsHeaders}/>
                     </Segment>
                 </Sticky>
             </div>

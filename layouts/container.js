@@ -24,7 +24,7 @@ class Container extends Component {
         this.handleScroll = this.handleScroll.bind(this);
         this.getContentsHeaders = this.getContentsHeaders.bind(this);
         this.state = {
-            currentHeader: '',
+            currentHeaderId: '',
             contentsHeaders: ''
         };
     }
@@ -50,7 +50,7 @@ class Container extends Component {
                 headers.push(item);
                 item = {};
             }
-        })
+        });
         return headers;
     }
 
@@ -98,7 +98,8 @@ class Container extends Component {
                         {this.extraComponent(Indicator, {currentPage: 1})}
                     </Grid.Column>
                     <Grid.Column className='Grids'>
-                        {this.extraComponent(TableOfContents ,{context: contextRef,
+                        {this.extraComponent(TableOfContents,
+                            {context: contextRef,
                             contentsHeaders: contentsHeaders,
                             currentHeaderId: currentHeaderId})}
                     </Grid.Column>

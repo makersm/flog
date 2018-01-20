@@ -62,5 +62,5 @@ class ContentsHeader extends Component{
 }
 
 
-ContentsHeader.defaultProps = defaultProps
-export default ContentsHeader
+ContentsHeader.defaultProps = defaultProps;
+export default ContentsHeader;

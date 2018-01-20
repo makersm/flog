@@ -130,7 +130,7 @@ function getPostsInfo(basePath, param) {
 
 function getAllPostsInfo(cwdPath) {
     let returnObj = childProcess.spawnSync('find',
-        ['.', '-type f', '-printf', '%TY-%Tm-%Td-%TT%p\n'],
+        ['.', '-type', 'f', '-printf', '%TY-%Tm-%Td-%TT%p\n'],
         {cwd: cwdPath});
 
     if(returnObj.error) {
@@ -139,10 +139,11 @@ function getAllPostsInfo(cwdPath) {
         return error;
     }
 
-    if(!returnObj.stdout)
+    if(!returnObj.stdout) {
         return [];
+    }
 
-    let fileNamesWithPathAndDate = returnObj.stdout.split(/[\n]/);
+    let fileNamesWithPathAndDate = returnObj.stdout.toString('utf-8').split(/[\n]/);
     fileNamesWithPathAndDate = fileNamesWithPathAndDate.filter((line) => {return line.length > 0});
     fileNamesWithPathAndDate.sort((a, b) => {
         return a > b ? 1 : -1;
