@@ -1,5 +1,5 @@
 {
-  "name": "maker-blog-template",
+  "name": "flog",
   "scripts": {
     "dev": "next",
     "build": "next build",
