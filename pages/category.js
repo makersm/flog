@@ -1,10 +1,10 @@
-import React, {Component} from 'react'
-import Fonts from '../static/Fonts'
-import Page from '../layouts/main'
-import PostListContainer from '../layouts/container'
-import axios from 'axios'
-import {PostNameList} from '../components'
-import Error from './_error'
+import React, {Component} from 'react';
+import Fonts from '../static/Fonts';
+import Page from '../layouts/main';
+import PostListContainer from '../layouts/container';
+import axios from 'axios';
+import {PostNameList} from '../components';
+import Error from './_error';
 
 const InlineStyle = () => (
     <style>{`
@@ -12,20 +12,20 @@ const InlineStyle = () => (
 			background: #E0E0E0;
 		}
 	`}</style>
-)
+);
 
 class Category extends Component {
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     componentDidMount() {
-        Fonts()
+        Fonts();
     }
 
     render() {
-        const {dirJsonTree, postsInfo, errorMsg} = this.props
-        if(errorMsg) return <Error errorMsg={errorMsg}/>
+        const {dirJsonTree, postsInfo, statusCode, errorMsg} = this.props;
+        if(statusCode >= 400) return <Error statusCode={statusCode} errorMsg={errorMsg}/>;
         return (
             <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
@@ -33,30 +33,36 @@ class Category extends Component {
                     <PostNameList postsInfo={postsInfo}/>
                 </PostListContainer>
             </Page>
-        )
+        );
     }
+}
+
+function varify(query) {
+    return 'dirJsonTree' in query && query['dirJsonTree'][0] && 'postsInfo' in query;
 }
 
 Category.getInitialProps = async function (context) {
-    if(context.query['dirJsonTree'] && context.query['dirJsonTree'][0])
-        return context.query
-    else {
-        const config = {headers: {'http_x_requested_with': 'axios'}}
-
-        const pathName = context.pathname
-        let id = context.query.path
+    if(varify(context.query)) {
+        if(context.query.err)
+            return {statusCode: context.query.err.code, errorMsg: context.query.err.message};
+        return context.query;
+    } else {
+        const config = {headers: {'http_x_requested_with': 'axios'}};
+        const pathName = context.pathname;
+        let id = context.query.path;
         if(!id)
-            id = '/'
+            id = '/';
 
         const responseData = axios.get(`${pathName}${id}`, config)
-            .then((response) => {return response.data})
-            .catch(err => {
-                console.error(err)
-                return {errorMsg: err}
+            .then((response) => {
+                return response.data;
             })
+            .catch(err => {
+                return {statusCode: err.code, errorMsg: err.message};
+            });
 
-        return responseData
+        return responseData;
     }
-}
+};
 
-export default Category
+export default Category;

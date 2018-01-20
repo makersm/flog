@@ -25,7 +25,7 @@ class Index extends Component {
 
     render() {
         const {dirJsonTree, postInfo, statusCode, errorMsg} = this.props;
-        if(statusCode > 400) return <Error statusCode={statusCode} errorMsg={errorMsg}/>;
+        if(statusCode >= 400) return <Error statusCode={statusCode} errorMsg={errorMsg}/>;
         return (
             <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
@@ -54,7 +54,6 @@ Index.getInitialProps = async function(context) {
                 return response.data;
             })
             .catch(err => {
-                console.error(`hihi :${err.code}`);
                 return {statusCode: err.code, errorMsg: err.message};
             });
 

@@ -1,49 +1,58 @@
-const express = require('express')
-const next = require('next')
+const express = require('express');
+const next = require('next');
 
-const { getDirTree, getBasePath, getPostsInfo, getAllPostsInfo, getPostInfo, getCurrentPostInfo } = require('./lib/exec')
+const { getDirTree, getBasePath, getPostsInfo, getAllPostsInfo, getPostInfo, getCurrentPostInfo } = require('./lib/exec');
 
-const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev })
-const handle = app.getRequestHandler()
+const dev = process.env.NODE_ENV !== 'production';
+const app = next({ dev });
+const handle = app.getRequestHandler();
 
 app.prepare()
 .then(() => {
-	const server = express()
-    let imgReg = new RegExp(/\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)$/)
+	const server = express();
+    let imgReg = new RegExp(/\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)$/);
 
     server.get('/_next*', (req, res) => {
-        return handle(req, res)
-    })
+        return handle(req, res);
+    });
 
     server.get('/_webpack*', (req, res) => {
-        return handle(req, res)
-    })
+        return handle(req, res);
+    });
 
     server.get('/category*', (req, res) => {
-        let param = req.originalUrl.split('/category')[1]
-        param = decodeURIComponent(param)
-        let basePath = getBasePath()
-        let commonQueryParams = {dirJsonTree: getDirTree()}
+        let param = req.originalUrl.split('/category')[1];
+        param = decodeURIComponent(param);
+        let basePath = getBasePath();
 
-        let postsInfo
+        let dirJsonTree = getDirTree();
+
+        if(dirJsonTree instanceof Error) {
+            res.statusCode = dirJsonTree.code;
+            res.statusMessage = dirJsonTree.message;
+            return app.renderError(null, req, res, '/category', {err: dirJsonTree});
+        }
+
+        let commonQueryParams = {dirJsonTree: dirJsonTree};
+
+        let postsInfo;
         if(!param || param === '/')
-            postsInfo = getAllPostsInfo(basePath)
+            postsInfo = getAllPostsInfo(basePath);
         else
             postsInfo = getPostsInfo(basePath, param, () => {
                 return app.render(req, res, '/_error', req.query)
-            })
+            });
 
         if(postsInfo instanceof Promise) {
-            return postsInfo
+            return postsInfo;
         }
 
-        commonQueryParams['postsInfo'] = postsInfo
+        commonQueryParams['postsInfo'] = postsInfo;
 
         if(req.get('http_x_requested_with')) {
-            res.send(commonQueryParams)
+            res.send(commonQueryParams);
         } else {
-            return app.render(req, res, '/category', commonQueryParams)
+            return app.render(req, res, '/category', commonQueryParams);
         }
     })
 
