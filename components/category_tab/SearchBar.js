@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {Input, Icon} from 'semantic-ui-react'
+import React, {Component} from 'react';
+import {Input, Icon} from 'semantic-ui-react';
 
 const InlineStyle = () => (
     <style>{`
@@ -7,17 +7,15 @@ const InlineStyle = () => (
             margin-bottom: 10px
 		}
 	`}</style>
-)
+);
 
 class SearchBar extends Component {
     //TODO generate indicator at 1.1
     constructor(props) {
-        super(props)
+        super(props);
     }
 
-    buttonClick = () => {
-        console.log('hello world')
-    }
+    buttonClick = () => {}
 
     render() {
         return (
@@ -27,8 +25,9 @@ class SearchBar extends Component {
                     icon={<Icon name='search' inverted circular link onClick={this.buttonClick}/>}
                     placeholder='Search...'
                     fluid/>
-            </div>)
+            </div>
+        );
     }
 }
 
-export default SearchBar
+export default SearchBar;

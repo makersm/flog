@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {SearchBar, DirList, SubHeader} from '../index'
+import React, {Component} from 'react';
+import {SearchBar, DirList, SubHeader} from '../index';
 
 const InlineStyle = () => (
     <style>{`
@@ -11,32 +11,32 @@ const InlineStyle = () => (
             background-color: #b3b3cc;
 		}
 	`}</style>
-)
+);
 
 class CategoryTab extends Component{
 
     constructor(props){
-        super(props)
+        super(props);
         this.state = { width: '0', height: '0' };
-        this.updateDocumentDimensions = this.updateDocumentDimensions.bind(this)
+        this.updateDocumentDimensions = this.updateDocumentDimensions.bind(this);
     }
 
     componentDidMount() {
         this.updateDocumentDimensions();
-        document.addEventListener('resize', this.updateDocumentDimensions)
+        document.addEventListener('resize', this.updateDocumentDimensions);
     }
 
     componentWillUnmount() {
-        document.removeEventListener('resize', this.updateDocumentDimensions)
+        document.removeEventListener('resize', this.updateDocumentDimensions);
     }
 
     updateDocumentDimensions() {
-        this.setState({ width: document.body.scrollwidth, height: document.body.scrollHeight})
+        this.setState({ width: document.body.scrollwidth, height: document.body.scrollHeight});
     }
 
     render() {
-        const {dirJsonTree} = this.props
-        const {height} = this.state
+        const {dirJsonTree} = this.props;
+        const {height} = this.state;
 
         return (
             <div className='Category' style={{height: height}}>
@@ -45,8 +45,8 @@ class CategoryTab extends Component{
                 <SearchBar/>
                 <DirList dirJsonTree={dirJsonTree}/>
             </div>
-        )
+        );
     }
 }
 
-export default CategoryTab
+export default CategoryTab;

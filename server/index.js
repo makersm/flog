@@ -54,51 +54,51 @@ app.prepare()
         } else {
             return app.render(req, res, '/category', commonQueryParams);
         }
-    })
+    });
 
     server.get('/post*', (req, res) => {
-        let param = req.originalUrl.split('/post')[1]
-        param = decodeURIComponent(param)
-        let basePath = getBasePath()
+        let param = req.originalUrl.split('/post')[1];
+        param = decodeURIComponent(param);
+        let basePath = getBasePath();
 
         ////// send img file ///////////////////////////////////////
         if(imgReg.test(param)) {
-            let postFix = imgReg.exec(param)[1]
-            res.set('Content-Type', `image/${postFix}`)
-            res.sendFile(basePath+param)
+            let postFix = imgReg.exec(param)[1];
+            res.set('Content-Type', `image/${postFix}`);
+            res.sendFile(basePath+param);
         }
 
         ////// send text ////////////////////////////////////////////
-        let commonQueryParams = {dirJsonTree: getDirTree()}
+        let commonQueryParams = {dirJsonTree: getDirTree()};
 
-        let postInfo
+        let postInfo;
         if(!param || param === '/')
-            postInfo = getCurrentPostInfo()
+            postInfo = getCurrentPostInfo();
         else {
             postInfo = getPostInfo(basePath, param, () => {
-                return app.render(req, res, '/_error', req.query)
-            })
+                return app.render(req, res, '/_error', req.query);
+            });
 
             if (postInfo instanceof Promise)
-                return postInfo
+                return postInfo;
         }
 
-        commonQueryParams['postInfo'] = postInfo
+        commonQueryParams['postInfo'] = postInfo;
 
         if(req.get('http_x_requested_with')) {
-            res.send(commonQueryParams)
+            res.send(commonQueryParams);
         } else {
-            return app.render(req, res, '/post', commonQueryParams)
+            return app.render(req, res, '/post', commonQueryParams);
         }
     })
 
     server.use('/*\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)$', (req, res) => {
-        let basePath = getBasePath()
-        let name = decodeURIComponent(req.originalUrl)
-        let postFix = imgReg.exec(name)[1]
-        res.set('Content-Type', `image/${postFix}`)
-        res.sendFile(basePath+name)
-    })
+        let basePath = getBasePath();
+        let name = decodeURIComponent(req.originalUrl);
+        let postFix = imgReg.exec(name)[1];
+        res.set('Content-Type', `image/${postFix}`);
+        res.sendFile(basePath+name);
+    });
 
 	server.get('/', (req, res) => {
 	    let dirJsonTree = getDirTree();
@@ -116,18 +116,18 @@ app.prepare()
         } else {
             return app.render(req, res, req.originalUrl, commonQueryParams);
         }
-	})
+	});
 
     server.get('*', (req, res) => {
-        return app.render(req, res, '/_error', req.query)
-    })
+        return app.render(req, res, '/_error', req.query);
+    });
 
 	server.listen(3000, (err) => {
-		if (err) throw err
-		console.log('> Ready on http://localhost:3000')
-	})
+		if (err) throw err;
+		console.log('> Ready on http://localhost:3000');
+	});
 })
 .catch((ex) => {
-	console.error(ex.stack)
-	process.exit(1)
-})
+	console.error(ex.stack);
+	process.exit(1);
+});

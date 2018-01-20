@@ -15,6 +15,7 @@ const InlineStyle = () => (
 );
 
 class Category extends Component {
+
     constructor(props) {
         super(props);
     }

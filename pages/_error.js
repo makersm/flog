@@ -1,7 +1,7 @@
-import React from 'react'
-import {Header} from '../components'
-import Fonts from '../static/Fonts'
-import {Icon} from 'semantic-ui-react'
+import React from 'react';
+import {Header} from '../components';
+import Fonts from '../static/Fonts';
+import {Icon} from 'semantic-ui-react';
 
 const InlineStyle = () => (
     <style>{`
@@ -14,6 +14,7 @@ const InlineStyle = () => (
 );
 
 class Error extends React.Component {
+
     componentDidMount() {
         Fonts();
     }

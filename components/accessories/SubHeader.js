@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const InlineStyle = () => (
     <style>{`
@@ -8,16 +8,18 @@ const InlineStyle = () => (
 			margin: 0 0 1rem 0;
 			text-align: center;
 		}
-		`}</style>
-)
+    `}</style>
+);
+
 const SubHeader = (props) => {
-    const {name} = props
+    const {name} = props;
+
     return (
         <div className="SubHeader">
             <InlineStyle/>
             {name}
         </div>
-    )
-}
+    );
+};
 
-export default SubHeader
+export default SubHeader;

@@ -15,6 +15,7 @@ const InlineStyle = () => (
 );
 
 class Index extends Component {
+
     constructor(props) {
         super(props);
     }
@@ -33,7 +34,7 @@ class Index extends Component {
                     <PostView postInfo={postInfo}/>
                 </PostContainer>
             </Page>
-        )
+        );
     }
 }
 

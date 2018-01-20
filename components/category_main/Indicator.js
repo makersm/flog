@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const InlineStyle = () => (
     <style>{`
@@ -6,7 +6,7 @@ const InlineStyle = () => (
             font-size: 1.2rem;
         }
     `}</style>
-)
+);
 
 const Indicator = () => {
     //TODO generate indicator at 1.1
@@ -18,4 +18,4 @@ const Indicator = () => {
     );
 };
 
-export default Indicator
+export default Indicator;

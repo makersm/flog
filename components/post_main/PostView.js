@@ -1,5 +1,4 @@
-import React, {Component} from 'react'
-
+import React, {Component} from 'react';
 
 const InlineStyle = () => (
     <style>{`
@@ -33,8 +32,9 @@ const defaultProps = {
 };
 
 class PostView extends Component {
+
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     render() {

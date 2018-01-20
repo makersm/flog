@@ -1,22 +1,22 @@
-import React, {Component} from 'react'
-import PropTypes from 'prop-types'
-import {Dir} from '../index'
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import {Dir} from '../index';
 
 const propTypes = {
     dirJsonTree: PropTypes.array,
     dirPath: PropTypes.string,
-}
+};
 
 const defaultProps = {
     dirJsonTree: [],
     dirPath: ''
-}
+};
 
 
 class DirList extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     hierarchicalArrangment(jsonTree, path) {
@@ -27,12 +27,12 @@ class DirList extends Component {
                         <Dir name={dir.name} count={dir.fileCount} id={path + '/' + dir.name}/>
                         <DirList dirJsonTree={dir.contents} dirPath={path + '/' + dir.name}/>
                     </div>
-                )
+                );
             } else {
                 if(dir.type !== 'all')
                     return (
                         <Dir name={dir.name} count={dir.fileCount} key={path + '/' + dir.name} id={path + '/' + dir.name}/>
-                    )
+                    );
             }
         })
     }
@@ -42,14 +42,14 @@ class DirList extends Component {
             if(dir.type === 'all')
                 return (
                     <Dir name={dir.name} count={dir.fileCount} key={'/'} id={'/'}/>
-                )
+                );
         })
     }
 
     render() {
-        const {dirJsonTree, dirPath} = this.props
-        let hierarchy = this.hierarchicalArrangment(dirJsonTree, dirPath)
-        let allComponent = this.getAllComponent(dirJsonTree, dirPath)
+        const {dirJsonTree, dirPath} = this.props;
+        let hierarchy = this.hierarchicalArrangment(dirJsonTree, dirPath);
+        let allComponent = this.getAllComponent(dirJsonTree, dirPath);
 
         return (
             <div>
@@ -62,6 +62,6 @@ class DirList extends Component {
     }
 }
 
-DirList.propTypes = propTypes
-DirList.defaultProps = defaultProps
+DirList.propTypes = propTypes;
+DirList.defaultProps = defaultProps;
 export default DirList

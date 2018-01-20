@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {ContentsHeader} from '../../components'
+import React, {Component} from 'react';
+import {ContentsHeader} from '../../components';
 
 const InlineStyle = () => (
     <style>{`
@@ -27,22 +27,22 @@ const InlineStyle = () => (
             margin: 0;
         }
     `}</style>
-)
+);
 
 class ContentsHeaderList extends Component {
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     render() {
-        const {currentHeader, contentsHeaders} = this.props
+        const {currentHeaderId, contentsHeaders} = this.props;
         let match = contentsHeaders ? contentsHeaders.map((contentsHeader) => {
-                if(contentsHeader.id === currentHeader) {
+                if(contentsHeader.id === currentHeaderId) {
                     return <ContentsHeader name={contentsHeader.name} key={contentsHeader.id} id={contentsHeader.id}
                                            focus={true}/>
                 }
                 return <ContentsHeader name={contentsHeader.name} key={contentsHeader.id} id={contentsHeader.id}/>
-            }) : currentHeader
+            }) : currentHeaderId;
         return (
             <div className='ContentsHeaderList'>
                 <InlineStyle/>
@@ -52,4 +52,4 @@ class ContentsHeaderList extends Component {
     }
 }
 
-export default ContentsHeaderList
+export default ContentsHeaderList;

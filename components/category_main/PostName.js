@@ -1,5 +1,5 @@
-import React from 'react'
-import Link from 'next/link'
+import React from 'react';
+import Link from 'next/link';
 
 const InlineStyle = () => (
     <style>{`
@@ -8,11 +8,11 @@ const InlineStyle = () => (
             font-size: 1.2rem;
         }
     `}</style>
-)
+);
 
 
 const PostName = (props) => {
-    const {name, id} = props
+    const {name, id} = props;
     return (
         <div className='PostName'>
             <InlineStyle/>
@@ -27,4 +27,4 @@ const PostName = (props) => {
 };
 
 
-export default PostName
+export default PostName;

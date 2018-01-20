@@ -1,21 +1,21 @@
-import React, {Component} from 'react'
-import {SubHeader, ItemList, ContentsHeaderList} from '../index'
-import {Sticky, Segment} from 'semantic-ui-react'
+import React, {Component} from 'react';
+import {SubHeader, ItemList, ContentsHeaderList} from '../index';
+import {Sticky, Segment} from 'semantic-ui-react';
 
 const InlineStyle = () => (
     <style>{`
         .TableOfContents {
         }
     `}</style>
-)
+);
 
 class TableOfContents extends Component {
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     render() {
-        const {context, currentHeader, contentsHeaders} = this.props
+        const {context, currentHeader, contentsHeaders} = this.props;
         return (
             <div className='TableOfContents'>
                 <InlineStyle/>
@@ -32,4 +32,4 @@ class TableOfContents extends Component {
     }
 }
 
-export default TableOfContents
+export default TableOfContents;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const InlineStyle = () => (
     <style>{`
@@ -12,16 +12,16 @@ const InlineStyle = () => (
 			font-weight: 600;
 		}
 	`}</style>
-)
+);
 
 const Header = (props) => {
-    const {name} = props
+    const {name} = props;
     return (
         <div className="Header">
             <InlineStyle/>
             {name}
         </div>
-    )
-}
+    );
+};
 
-export default Header
+export default Header;

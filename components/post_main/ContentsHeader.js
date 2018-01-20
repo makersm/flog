@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 
 const InlineStyle = () => (
     <style>{`
@@ -12,44 +12,44 @@ const InlineStyle = () => (
             color: black;
         }
     `}</style>
-)
+);
 
 const defaultProps = {
     focus: false
-}
+};
 
 class ContentsHeader extends Component{
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             className: 'ContentsHeader'
-        }
-        this.setClassName = this.setClassName.bind(this)
+        };
+        this.setClassName = this.setClassName.bind(this);
     }
 
     setClassName(nextProps = this.props){
         if(nextProps.focus) {
             this.setState({
                 className: 'focus'
-            })
+            });
         } else {
             this.setState({
                 className: 'ContentsHeader'
-            })
+            });
         }
     }
 
     componentDidMount() {
-        this.setClassName()
+        this.setClassName();
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setClassName(nextProps)
+        this.setClassName(nextProps);
     }
 
     render() {
-        const {className} = this.state
-        const {name, id} = this.props
+        const {className} = this.state;
+        const {name, id} = this.props;
         return (
             <div className={className}>
                 <InlineStyle/>
@@ -57,7 +57,7 @@ class ContentsHeader extends Component{
                     {name}
                 </a>
             </div>
-        )
+        );
     }
 }
 

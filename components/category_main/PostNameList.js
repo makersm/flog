@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {PostName} from '../../components'
+import React, {Component} from 'react';
+import {PostName} from '../../components';
 
 const InlineStyle = () => (
     <style>{`
@@ -11,20 +11,20 @@ const InlineStyle = () => (
 
         }
     `}</style>
-)
+);
 
 const defaultProps = {
     postsInfo: []
-}
+};
 
 
 class PostNameList extends Component {
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     render() {
-        const {postsInfo} = this.props
+        const {postsInfo} = this.props;
         return (
             <div className='PostNameList'>
                 <InlineStyle/>
@@ -33,9 +33,9 @@ class PostNameList extends Component {
                     return <PostName name={postInfo.name} key={postInfo.path} id={postInfo.path}/>
                 })}
             </div>
-        )
+        );
     }
-};
+}
 
-PostNameList.defaultProps = defaultProps
-export default PostNameList
+PostNameList.defaultProps = defaultProps;
+export default PostNameList;

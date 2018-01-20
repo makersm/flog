@@ -1,6 +1,6 @@
-const path = require('path')
-const childProcess = require('child_process')
-const fs = require('fs')
+const path = require('path');
+const childProcess = require('child_process');
+const fs = require('fs');
 const md = require('markdown-it')({
         html: true,
         linkify: true,
@@ -16,7 +16,7 @@ const md = require('markdown-it')({
     .use(require('markdown-it-mark'))
     .use(require('markdown-it-deflist'))
     .use(require('markdown-it-toc-and-anchor').default)
-    .use(require('markdown-it-header-sections'))
+    .use(require('markdown-it-header-sections'));
 
 
 const CONFIG_DIR = [
@@ -63,15 +63,15 @@ function JSONDirfilter(jsonTree) {
         }
     }
 
-    return jsonTree
+    return jsonTree;
 }
 
 function getBasePath() {
-    const configDir = path.join(__dirname, CONFIG_DIR.join('/'))
-    const contents = loadFile(configDir, 'config.json')
-    const cwdPath = absolutePath(contents['root'], configDir)
+    const configDir = path.join(__dirname, CONFIG_DIR.join('/'));
+    const contents = loadFile(configDir, 'config.json');
+    const cwdPath = absolutePath(contents['root'], configDir);
 
-    return cwdPath
+    return cwdPath;
 }
 
 function getDirTree() {
@@ -156,7 +156,7 @@ function getAllPostsCount(cwdPath) {
 
     fileNames = fileNames.filter((name) => {return name.length > 0 && !imgReg.test(name)});
 
-    return fileNames.length
+    return fileNames.length;
 }
 
 function getPostInfo(basePath, param, error) {
@@ -188,10 +188,10 @@ function readFile(cwdPath, name) {
 }
 
 function readPost(cwdPath, name) {
-    const text = readFile(cwdPath, name)
-    const html = md.render(text)
+    const text = readFile(cwdPath, name);
+    const html = md.render(text);
 
-    return `<article class='markdown-body'>${html}</article>`
+    return `<article class='markdown-body'>${html}</article>`;
 
 }
 
@@ -222,4 +222,4 @@ module.exports = {
     getAllPostsInfo,
     getPostInfo,
     getCurrentPostInfo,
-}
+};

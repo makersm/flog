@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import Fonts from '../static/Fonts'
-import Page from '../layouts/main'
-import {PostView} from '../components'
-import PostContainer from '../layouts/container'
-import axios from 'axios'
-import Error from './_error'
+import Fonts from '../static/Fonts';
+import Page from '../layouts/main';
+import {PostView} from '../components';
+import PostContainer from '../layouts/container';
+import axios from 'axios';
+import Error from './_error';
 
 const InlineStyle = () => (
     <style>{`
@@ -12,20 +12,20 @@ const InlineStyle = () => (
 			background: #E0E0E0;
 		}
 	`}</style>
-)
+);
 
 class Post extends Component {
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     componentDidMount() {
-        Fonts()
+        Fonts();
     }
 
     render() {
-        const {dirJsonTree, postInfo, errorMsg} = this.props
-        if(errorMsg) return <Error errorMsg={errorMsg}/>
+        const {dirJsonTree, postInfo, errorMsg} = this.props;
+        if(errorMsg) return <Error errorMsg={errorMsg}/>;
         return (
             <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
@@ -33,28 +33,28 @@ class Post extends Component {
                     <PostView postInfo={postInfo}/>
                 </PostContainer>
             </Page>
-        )
+        );
     }
 }
 
 Post.getInitialProps = async function (context) {
     if(context.query['dirJsonTree'] && context.query['dirJsonTree'][0])
-        return context.query
+        return context.query;
     else {
-        const config = {headers: {'http_x_requested_with': 'axios'}}
+        const config = {headers: {'http_x_requested_with': 'axios'}};
 
-        const pathName = context.pathname
-        const id = context.query.path
+        const pathName = context.pathname;
+        const id = context.query.path;
 
         const responseData = axios.get(`${pathName}${id}`, config)
             .then((response) => {return response.data})
             .catch(err => {
                 console.error(err)
                 return {errorMsg: err}
-            })
+            });
 
-        return responseData
+        return responseData;
     }
-}
+};
 
 export default Post;
