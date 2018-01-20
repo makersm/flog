@@ -38,12 +38,12 @@ class Index extends Component {
     }
 }
 
-function varify(query) {
+function verify(query) {
     return 'dirJsonTree' in query && query['dirJsonTree'][0] && 'postInfo' in query;
 }
 
 Index.getInitialProps = async function(context) {
-    if(varify(context.query)) {
+    if(verify(context.query)) {
         if(context.query.err)
             return {statusCode: context.query.err.code, errorMsg: context.query.err.message};
         return context.query;
