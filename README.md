@@ -29,7 +29,8 @@ post is automatically rendered when you create it based on `markdown`.
     - possible to write all the relative addresses, absolute addresses, `~`, and so on.
 2. Write the post content to `1`, (below it will be called `root`). The post content is automatically rendered when it is created with markdown. Supported items are the same as `Note 2. markdown-it plugin list`.
     - If directory is added to `root`, it is regarded as category classification. By default, all category exists and all files in the `root` directory of that post are displayed.
-3. Type `npm start` to run server. Default port is `3000`
+3. Type `npm start` to run server. Default port is `3000`.
+    - If you want to change port, edit `server/index.js` file.
 4. Enjoy it!
 
 > **Note 1.** If you want to comment, please try social comment plugin like `disqus`
@@ -50,12 +51,14 @@ post is automatically rendered when you create it based on `markdown`.
 
 
 ### Support
-#### version 1.0(current)
+#### version 1.0
 1. Support markdown rendering
 2. Support for toc highlighting / link
 3. Category classification support
 4. By default, the index page is displayed as the most recent post
-5. Treat error page perfectly
+
+#### version 1.01(current)
+1. Treat error page perfectly
 
 ### Future support
 1. Search function support
