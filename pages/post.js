@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
-import Fonts from '../static/Fonts';
 import Page from '../layouts/main';
 import {PostView} from '../components';
 import PostContainer from '../layouts/container';
 import axios from 'axios';
 import Error from './_error';
-import Index from "./index";
 
 const InlineStyle = () => (
     <style>{`
@@ -16,12 +14,9 @@ const InlineStyle = () => (
 );
 
 class Post extends Component {
+
     constructor(props) {
         super(props);
-    }
-
-    componentDidMount() {
-        Fonts();
     }
 
     render() {

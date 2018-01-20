@@ -8,7 +8,6 @@
   "dependencies": {
     "axios": "^0.17.1",
     "express": "^4.16.2",
-    "fontfaceobserver": "^2.0.13",
     "jquery": "^3.2.1",
     "markdown-it": "^8.4.0",
     "markdown-it-abbr": "^1.0.4",

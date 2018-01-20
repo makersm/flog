@@ -14,6 +14,7 @@ class CustomDocument extends Document {
                 <Head>
                     <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css'/>
                     <link rel="stylesheet" href="/static/github-markdown.css"/>
+                    <link href="https://fonts.googleapis.com/css?family=Kalam" rel="stylesheet"/>
 
                     <style>{`
                         .markdown-body {

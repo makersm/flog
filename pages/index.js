@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import Fonts from '../static/Fonts'
 import Page from '../layouts/main'
 import {PostView} from '../components'
 import PostContainer from '../layouts/container'
@@ -18,10 +17,6 @@ class Index extends Component {
 
     constructor(props) {
         super(props);
-    }
-
-    componentDidMount() {
-        Fonts();
     }
 
     render() {

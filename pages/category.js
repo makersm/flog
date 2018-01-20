@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import Fonts from '../static/Fonts';
 import Page from '../layouts/main';
 import PostListContainer from '../layouts/container';
 import axios from 'axios';
@@ -18,10 +17,6 @@ class Category extends Component {
 
     constructor(props) {
         super(props);
-    }
-
-    componentDidMount() {
-        Fonts();
     }
 
     render() {

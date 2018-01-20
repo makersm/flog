@@ -3,9 +3,9 @@ import React from 'react';
 const InlineStyle = () => (
     <style>{`
 		.Header {
+		    font-family: 'Kalam', cursive;
 			background-color: #666699;
 			color: white;
-			font-family: 'Kalam', cursive;
 			font-size: 2rem;
 			padding: 1.2rem;
 			text-align: center;
