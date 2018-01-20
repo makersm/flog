@@ -22,7 +22,6 @@ class Dir extends Component {
 
     constructor(props) {
         super(props);
-        this.spread = this.spread.bind(this)
     }
 
     render() {

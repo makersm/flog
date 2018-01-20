@@ -94,14 +94,17 @@ function getDirTree() {
 }
 
 // for category list
-function getPostsInfo(basePath, param, error) {
+function getPostsInfo(basePath, param) {
     let cwdPath = path.join(basePath, param);
     let resultObj = childProcess.spawnSync('find',
         ['.', '-maxdepth', '1', '-type', 'f', '-printf', '%TY-%Tm-%Td-%TT%p\n'],
         {cwd: cwdPath});
 
-    if(resultObj.error || resultObj.stdout === null)
-        return error();
+    if(resultObj.error || resultObj.stdout === null) {
+        let error = new Error();
+        error.code = 404;
+        return error;
+    }
 
     let rawData = resultObj.stdout.toString('utf-8');
 
@@ -126,12 +129,20 @@ function getPostsInfo(basePath, param, error) {
 }
 
 function getAllPostsInfo(cwdPath) {
-    let rawFileNames = childProcess.execSync('find . -type f -printf \'%TY-%Tm-%Td-%TT%p\\n\'', {cwd: cwdPath}).toString('utf-8').trim();
+    let returnObj = childProcess.spawnSync('find',
+        ['.', '-type f', '-printf', '%TY-%Tm-%Td-%TT%p\n'],
+        {cwd: cwdPath});
 
-    if(!rawFileNames)
+    if(returnObj.error) {
+        let error = new Error();
+        error.code = 500;
+        return error;
+    }
+
+    if(!returnObj.stdout)
         return [];
 
-    let fileNamesWithPathAndDate = rawFileNames.split(/[\n]/);
+    let fileNamesWithPathAndDate = returnObj.stdout.split(/[\n]/);
     fileNamesWithPathAndDate = fileNamesWithPathAndDate.filter((line) => {return line.length > 0});
     fileNamesWithPathAndDate.sort((a, b) => {
         return a > b ? 1 : -1;
@@ -159,7 +170,7 @@ function getAllPostsCount(cwdPath) {
     return fileNames.length;
 }
 
-function getPostInfo(basePath, param, error) {
+function getPostInfo(basePath, param) {
     let allPath = path.join(basePath, param);
     let n = param.split('/');
     let name = n[n.length-1];
@@ -169,11 +180,13 @@ function getPostInfo(basePath, param, error) {
         ['.', '-maxdepth', '1', '-name', name, '-type', 'f', '-printf', '%TY-%Tm-%Td\n'],
         {cwd: cwdPath});
 
-    if(resultObj.error || !resultObj.stdout.toString('utf-8').trim())
-        return error();
+    if(resultObj.error || !resultObj.stdout.toString('utf-8').trim()){
+        let error = new Error();
+        error.code = 404;
+        return error;
+    }
 
     let date = resultObj.stdout.toString('utf-8');
-
     let contents = readPost(cwdPath, name);
 
     return {title: name, date: date, contents: contents};
@@ -198,9 +211,10 @@ function readPost(cwdPath, name) {
 function getCurrentPostInfo() {
     let basePath = getBasePath();
     let jsonFileNames = getAllPostsInfo(basePath);
+    if(jsonFileNames instanceof Error)
+        return jsonFileNames;
 
     let currentPost = jsonFileNames[jsonFileNames.length-1];
-    console.log(currentPost)
 
     if(!currentPost)
         return {title: '', date: '', contents: ''};
