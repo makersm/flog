@@ -48,7 +48,7 @@ app.prepare()
 
             commonQueryParams['postsInfo'] = postsInfo;
 
-            if (req.get('http_x_requested_with')) {
+            if (req.get('http-x-requested-with')) {
                 res.send(commonQueryParams);
             } else {
                 return app.render(req, res, '/category', commonQueryParams);
@@ -80,7 +80,7 @@ app.prepare()
 
             commonQueryParams['postInfo'] = postInfo;
 
-            if (req.get('http_x_requested_with')) {
+            if (req.get('http-x-requested-with')) {
                 res.send(commonQueryParams);
             } else {
                 return app.render(req, res, '/post', commonQueryParams);
@@ -101,7 +101,7 @@ app.prepare()
 
             let commonQueryParams = {dirJsonTree: dirJsonTree, postInfo: getCurrentPostInfo()};
 
-            if (req.get('http_x_requested_with')) {
+            if (req.get('http-x-requested-with')) {
                 return res.send(commonQueryParams);
             } else {
                 return app.render(req, res, req.originalUrl, commonQueryParams);

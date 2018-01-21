@@ -43,7 +43,7 @@ Category.getInitialProps = async function (context) {
             return {statusCode: context.query.err.code, errorMsg: context.query.err.message};
         return context.query;
     } else {
-        const config = {headers: {'http_x_requested_with': 'axios'}};
+        const config = {headers: {'http-x-requested-with': 'axios'}};
         const pathName = context.pathname;
         let id = context.query.path;
         if (!id)
