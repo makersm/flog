@@ -5,6 +5,14 @@
     "build": "next build",
     "start": "node server"
   },
+  "author": {
+    "name": "makersm(Somin Lee)",
+    "email": "sayyo1120@gmail.com"
+  },
+  "repository": {
+	"type": "git",
+	"url": "https://github.com/makersm/flog.git"
+  },
   "dependencies": {
     "axios": "^0.17.1",
     "express": "^4.16.2",
