@@ -49,7 +49,7 @@ Category.getInitialProps = async function (context) {
         if (!id)
             id = '/';
 
-        const responseData = axios.get(`${pathName}${id}`, config)
+        const responseData = await axios.get(`${pathName}${id}`, config)
             .then((response) => {
                 return response.data;
             })

@@ -48,7 +48,7 @@ Post.getInitialProps = async function (context) {
         const pathName = context.pathname;
         const id = context.query.path;
 
-        const responseData = axios.get(`${pathName}${id}`, config)
+        const responseData = await axios.get(`${pathName}${id}`, config)
             .then((response) => {
                 return response.data;
             })

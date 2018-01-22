@@ -45,7 +45,7 @@ Index.getInitialProps = async function (context) {
     } else {
         const config = {headers: {'http-x-requested-with': 'axios'}};
 
-        const responseData = axios.get('', config)
+        const responseData = await axios.get('', config)
             .then((response) => {
                 return response.data;
             })
