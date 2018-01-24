@@ -21,6 +21,7 @@ app.prepare()
     .then(() => {
         const server = express();
         let imgReg = new RegExp(/\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)$/);
+        let axiosReg = new RegExp(/application\/json/);
 
         server.get('/_next*', (req, res) => {
             return handle(req, res);
@@ -33,6 +34,8 @@ app.prepare()
         server.get('/category*', (req, res) => {
             let param = req.originalUrl.split(/^\/category/)[1];
             param = decodeURIComponent(param);
+            console.log('category: '+param);
+
             let basePath = getBasePath();
 
             let dirJsonTree = getDirTree();
@@ -54,11 +57,36 @@ app.prepare()
 
             commonQueryParams['postsInfo'] = postsInfo;
 
-            if (req.get('http-x-requested-with')) {
-                res.send(commonQueryParams);
-            } else {
-                return app.render(req, res, '/category', commonQueryParams);
-            }
+            return app.render(req, res, '/category', commonQueryParams);
+        });
+
+        server.post('/category*', (req, res) => {
+            let param = req.originalUrl.split(/^\/category/)[1];
+            param = decodeURIComponent(param);
+            console.log(res);
+
+            let basePath = getBasePath();
+
+            let dirJsonTree = getDirTree();
+            let errorOccur = isErrorOccur(res, dirJsonTree);
+            if(errorOccur['err'])
+                return app.render(req, res, '/_error', {err :errorOccur['err']});
+
+            let commonQueryParams = {dirJsonTree: dirJsonTree};
+
+            let postsInfo;
+            if (!param || param === '/')
+                postsInfo = getAllPostsInfo(basePath);
+            else
+                postsInfo = getPostsInfo(basePath, param);
+
+            errorOccur = isErrorOccur(res, postsInfo);
+            if(errorOccur['err'])
+                return app.render(req, res, '/_error', {err :errorOccur['err']});
+
+            commonQueryParams['postsInfo'] = postsInfo;
+
+            res.send(commonQueryParams);
         });
 
         server.get('/post*', (req, res) => {
@@ -129,6 +157,7 @@ app.prepare()
         });
 
         server.get('*', (req, res) => {
+            console.log('hi');
             return app.render(req, res, '/_error', req.query);
         });
 

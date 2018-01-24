@@ -4,6 +4,7 @@ import {PostView} from '../components';
 import PostContainer from '../layouts/container';
 import axios from 'axios';
 import Error from './_error';
+import Router from 'next/router'
 
 const InlineStyle = () => (
     <style>{`
@@ -39,6 +40,9 @@ function verify(query) {
 }
 
 Post.getInitialProps = async function (context) {
+    // Router.onRouteChangeStart = url => {
+    //     console.log('App is changing to: post:: ', url)
+    // };
     if (verify(context.query)) {
         if (context.query.err)
             return {statusCode: context.query.err.code, errorMsg: context.query.err.message};
@@ -48,6 +52,7 @@ Post.getInitialProps = async function (context) {
         const pathName = context.pathname;
         const id = context.query.path;
 
+        console.log(pathName, id);
         const responseData = await axios.get(`${pathName}${id}`, config)
             .then((response) => {
                 return response.data;

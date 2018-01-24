@@ -22,12 +22,12 @@ class Category extends Component {
     }
 
     // TODO make tmp log
-    // componentDidMount() {
-    //     console.log('didMount');
-    //     if(this.props['clientSide-rendering']) {
-    //         console.log('wefe');
-    //     }
-    // }
+    componentDidMount() {
+        console.log('didMount');
+        if(this.props['clientSide-rendering']) {
+            console.log('wefe');
+        }
+    }
     //
     // componentWillMount() {
     //     console.log('willmount');
@@ -75,21 +75,20 @@ function verify(query) {
 
 Category.getInitialProps = async function (context) {
     console.log('getInitialProps');
-    console.log(context);
     if (verify(context.query)) {
         if (context.query.err)
             return {statusCode: context.query.err.code, errorMsg: context.query.err.message};
+        console.log(context.req.headers);
         return context.query;
     } else {
-        const config = {headers: {'http-x-requested-with': 'axios'}};
+        // const config = {headers: {'X-Requested-With': 'axios'}};
         const pathName = context.pathname;
         let id = context.query.path;
         if (!id)
             id = '/';
 
-        const responseData = await axios.get(`${pathName}${id}`, config)
+        const responseData = await axios.post(`${pathName}${id}`)
             .then((response) => {
-                // return Object.assign(response.data, {'clientSide-rendering': true, 'href': `${pathName}${id}`});
                 return response.data;
             })
             .catch(err => {
