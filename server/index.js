@@ -8,12 +8,13 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({dev});
 const handle = app.getRequestHandler();
 
-function ifErrorOccurRenderErrorPage(req, res, errorData, url) {
+function isErrorOccur(res, errorData) {
     if (errorData instanceof Error) {
         res.statusCode = errorData.code;
         res.statusMessage = errorData.message;
-        return app.renderError(null, req, res, url, {err: errorData});
+        return {err: errorData}
     }
+    return {err: undefined}
 }
 
 app.prepare()
@@ -35,7 +36,9 @@ app.prepare()
             let basePath = getBasePath();
 
             let dirJsonTree = getDirTree();
-            ifErrorOccurRenderErrorPage(req, res, dirJsonTree, '/category');
+            let errorOccur = isErrorOccur(res, dirJsonTree);
+            if(errorOccur['err'])
+                return app.render(req, res, '/_error', {err :errorOccur['err']});
 
             let commonQueryParams = {dirJsonTree: dirJsonTree};
 
@@ -44,7 +47,10 @@ app.prepare()
                 postsInfo = getAllPostsInfo(basePath);
             else
                 postsInfo = getPostsInfo(basePath, param);
-            ifErrorOccurRenderErrorPage(req, res, postsInfo, '/category');
+
+            errorOccur = isErrorOccur(res, postsInfo);
+            if(errorOccur['err'])
+                return app.render(req, res, '/_error', {err :errorOccur['err']});
 
             commonQueryParams['postsInfo'] = postsInfo;
 
@@ -56,8 +62,12 @@ app.prepare()
         });
 
         server.get('/post*', (req, res) => {
+            //TODO tmp console.log
+            // console.log(`0: ${req.originalUrl}`);
             let param = req.originalUrl.split(/^\/post/)[1];
+            // console.log(`1: ${param}`);
             param = decodeURIComponent(param);
+            // console.log(param);
             let basePath = getBasePath();
 
             ////// send img file ///////////////////////////////////////
@@ -68,7 +78,12 @@ app.prepare()
             }
 
             ////// send text ////////////////////////////////////////////
-            let commonQueryParams = {dirJsonTree: getDirTree()};
+            let dirJsonTree = getDirTree();
+            let errorOccur = isErrorOccur(res, dirJsonTree);
+            if(errorOccur['err'])
+                return app.render(req, res, '/_error', {err :errorOccur['err']});
+
+            let commonQueryParams = {dirJsonTree: dirJsonTree};
 
             let postInfo;
             if (!param || param === '/')
@@ -76,7 +91,10 @@ app.prepare()
             else {
                 postInfo = getPostInfo(basePath, param);
             }
-            ifErrorOccurRenderErrorPage(req, res, postInfo, '/post');
+            errorOccur = isErrorOccur(res, postInfo);
+            if(errorOccur['err']) {
+                return app.render(req, res, '/_error', {err: errorOccur['err']});
+            }
 
             commonQueryParams['postInfo'] = postInfo;
 
@@ -97,7 +115,9 @@ app.prepare()
 
         server.get('/', (req, res) => {
             let dirJsonTree = getDirTree();
-            ifErrorOccurRenderErrorPage(req, res, dirJsonTree, '/');
+            let errorOccur = isErrorOccur(res, dirJsonTree);
+            if(errorOccur['isError'])
+                return app.render(req, res, '/_error', {err :errorOccur['err']});
 
             let commonQueryParams = {dirJsonTree: dirJsonTree, postInfo: getCurrentPostInfo()};
 

@@ -4,6 +4,7 @@ import PostListContainer from '../layouts/container';
 import axios from 'axios';
 import {PostNameList} from '../components';
 import Error from './_error';
+import Router from 'next/router';
 
 const InlineStyle = () => (
     <style>{`
@@ -17,11 +18,46 @@ class Category extends Component {
 
     constructor(props) {
         super(props);
+        console.log('constructor');
     }
+
+    // TODO make tmp log
+    // componentDidMount() {
+    //     console.log('didMount');
+    //     if(this.props['clientSide-rendering']) {
+    //         console.log('wefe');
+    //     }
+    // }
+    //
+    // componentWillMount() {
+    //     console.log('willmount');
+    // }
+    //
+    // componentWillUnmount() {
+    //     console.log('willUnmount');
+    //     if(this.props['clientSide-rendering']) {
+    //         // Router.replace(this.props['href']);
+    //         console.log('hellworold');
+    //     }
+    // }
+    //
+    // componentWillReceiveProps(nextProps){
+    //     console.log("componentWillReceiveProps: " + JSON.stringify(nextProps));
+    //     if(this.props['clientSide-rendering']) {
+    //     }
+    // }
+    //
+    //
+    // componentDidUpdate(prevProps, prevState){
+    //     console.log("componentDidUpdate: " + JSON.stringify(prevProps) + " " + JSON.stringify(prevState));
+    //     if(this.props['clientSide-rendering']) {
+    //         console.log('wefe');
+    //     }
+    // }
 
     render() {
         const {dirJsonTree, postsInfo, statusCode, errorMsg} = this.props;
-        if (statusCode >= 400) return <Error statusCode={statusCode} errorMsg={errorMsg}/>;
+        if (statusCode >= 400 || errorMsg) return <Error statusCode={statusCode} errorMsg={errorMsg}/>;
         return (
             <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
@@ -38,6 +74,8 @@ function verify(query) {
 }
 
 Category.getInitialProps = async function (context) {
+    console.log('getInitialProps');
+    console.log(context);
     if (verify(context.query)) {
         if (context.query.err)
             return {statusCode: context.query.err.code, errorMsg: context.query.err.message};
@@ -51,6 +89,7 @@ Category.getInitialProps = async function (context) {
 
         const responseData = await axios.get(`${pathName}${id}`, config)
             .then((response) => {
+                // return Object.assign(response.data, {'clientSide-rendering': true, 'href': `${pathName}${id}`});
                 return response.data;
             })
             .catch(err => {

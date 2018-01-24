@@ -14,18 +14,30 @@ const InlineStyle = () => (
 
 class Error extends React.Component {
 
+    makeMessage(statusCode, errorMsg) {
+        if(statusCode) {
+            if(errorMsg)
+                return `${statusCode} : ${errorMsg}`;
+            else
+                return `An ${statusCode} error occured on server`;
+        } else {
+            if(errorMsg)
+                return `'${errorMsg}' error occured on client`;
+            else
+                return `An error occured on client`;
+        }
+    }
+
     render() {
         const {statusCode, errorMsg} = this.props;
+        const message = this.makeMessage(statusCode, errorMsg);
         return (
             <div>
                 <InlineStyle/>
                 <Header name="MAKER BLOG TEMPLATE"/>
                 <div className="display-center">
                     <Icon name="exclamation"/>
-                    <h1>{!statusCode ? 'An error occurred on client' :
-                        errorMsg ? `${statusCode} : ${errorMsg}` :
-                            `An ${statusCode} error occurred on server`}
-                    </h1>
+                    <h1>{message}</h1>
                 </div>
             </div>
         )

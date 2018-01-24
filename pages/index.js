@@ -21,7 +21,7 @@ class Index extends Component {
 
     render() {
         const {dirJsonTree, postInfo, statusCode, errorMsg} = this.props;
-        if (statusCode >= 400) return <Error statusCode={statusCode} errorMsg={errorMsg}/>;
+        if (statusCode >= 400 || errorMsg) return <Error statusCode={statusCode} errorMsg={errorMsg}/>;
         return (
             <Page dirJsonTree={dirJsonTree}>
                 <InlineStyle/>
