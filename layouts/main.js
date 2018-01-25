@@ -6,13 +6,6 @@ export default class main extends React.Component {
 
     constructor(props) {
         super(props);
-        Router.onRouteChangeStart = url => {
-            console.log('App is changing to: ', url)
-        };
-
-        Router.onRouteChangeComplete = url => {
-            console.log('ChangeComplete: ', url)
-        };
     }
 
     render() {
