@@ -2,7 +2,8 @@ const express = require('express');
 const next = require('next');
 const path = require('path');
 
-const {getDirTree, getBasePath, getPostsInfo, getAllPostsInfo, getPostInfo, getCurrentPostInfo} = require('./lib/exec');
+const {getBasePath} = require('./lib/exec');
+const {renderCategory, renderPost, renderIndex} = require('./lib/render');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({dev});
@@ -10,119 +11,6 @@ const handle = app.getRequestHandler();
 
 const imgReg = new RegExp(/\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)$/);
 
-function isOk(res, errorMap, data) {
-    if (!(data instanceof Error)) {
-        return true;
-    } else {
-        res.statusCode = data.code;
-        res.statusMessage = data.message;
-        errorMap['err'] = data;
-        return false;
-    }
-}
-
-function renderPage(res, ...datas) {
-    let errorMap = {};
-    let isOkStatement = true;
-
-    for(let data of datas) {
-        if(!isOk(res, errorMap, data)) {
-            isOkStatement = false;
-            break;
-        }
-    }
-
-    return new Promise((resolve, reject) => {
-        if (isOkStatement) {
-            resolve();
-        } else {
-            reject(errorMap);
-        }
-    });
-}
-
-async function categoryRender(req, res, resolve) {
-    let param = req.originalUrl.split(/^\/category/)[1];
-    param = decodeURIComponent(param);
-    let basePath = getBasePath();
-
-    // checkpoint 1
-    let dirJsonTree = getDirTree();
-
-    // checkpoint 2
-    let postsInfo;
-    if (!param || param === '/')
-        postsInfo = getAllPostsInfo(basePath);
-    else
-        postsInfo = getPostsInfo(basePath, param);
-
-    let commonQueryParams = {dirJsonTree: dirJsonTree, postsInfo: postsInfo};
-
-    let render = await renderPage(res, dirJsonTree, postsInfo)
-        .then(
-            () => { return resolve(commonQueryParams); },
-            (errorMap) => { return app.render(req, res, '/_error', errorMap); }
-        )
-        .catch((err) => {
-            console.error(err);
-            return app.render(req, res, '/_error', {})});
-
-    return render;
-}
-
-async function postRender(req, res, resolve) {
-    let param = req.originalUrl.split(/^\/post/)[1];
-    param = decodeURIComponent(param);
-    let basePath = getBasePath();
-
-    if (imgReg.test(param)) {
-        let postFix = imgReg.exec(param)[1];
-        res.set('Content-Type', `image/${postFix}`);
-        return res.sendFile(path.join(basePath, param));
-    }
-
-    // checkpoint 1
-    let dirJsonTree = getDirTree();
-
-    // checkpoint 2
-    let postInfo;
-    if (!param || param === '/')
-        postInfo = getCurrentPostInfo();
-    else {
-        postInfo = getPostInfo(basePath, param);
-    }
-
-    let commonQueryParams = {dirJsonTree: dirJsonTree, postInfo: postInfo};
-
-    let render = await renderPage(res, dirJsonTree, postInfo)
-        .then(
-            () => { return resolve(commonQueryParams); },
-            (errorMap) => { return app.render(req, res, '/_error', errorMap); }
-        )
-        .catch((err) => {
-            console.error(err);
-            return app.render(req, res, '/_error', {})});
-
-    return render;
-}
-
-async function indexRender(req, res, resolve) {
-    let dirJsonTree = getDirTree();
-    let currentPostInfo = getCurrentPostInfo();
-
-    let commonQueryParams = {dirJsonTree: dirJsonTree, postInfo: currentPostInfo};
-
-    let render = await renderPage(res, dirJsonTree, currentPostInfo)
-        .then(
-            () => { return resolve(commonQueryParams); },
-            (errorMap) => { return app.render(req, res, '/_error', errorMap); }
-        )
-        .catch((err) => {
-            console.error(err);
-            return app.render(req, res, '/_error', {})});
-
-    return render;
-}
 
 app.prepare()
     .then(() => {
@@ -138,32 +26,38 @@ app.prepare()
 
         server.route('/category*')
             .get((req, res) => {
-                return categoryRender(req, res,
-                    (query) => { app.render(req, res, '/category', query); });
+                return renderCategory(req, res,
+                    (query) => { app.render(req, res, '/category', query); },
+                    (err) => { app.render(req, res, '/_error', err); });
             })
             .post((req, res) => {
-                return categoryRender(req, res,
-                    (query) => { res.json(query); });
+                return renderCategory(req, res,
+                    (query) => { res.json(query); },
+                    (err) => { app.render(req, res, '/_error', err); });
             });
 
         server.route('/post*')
             .get((req, res) => {
-                return postRender(req, res,
-                    (query) => { app.render(req, res, '/post', query); })
+                return renderPost(req, res,
+                    (query) => { app.render(req, res, '/post', query); },
+                    (err) => { app.render(req, res, '/_error', err); })
             })
             .post((req, res) => {
-                return postRender(req, res,
-                    (query) => { res.json(query); })
+                return renderPost(req, res,
+                    (query) => { res.json(query); },
+                    (err) => { app.render(req, res, '/_error', err); })
             });
 
         server.route('/')
             .get((req, res) => {
-                return indexRender(req, res,
-                    (query) => { app.render(req, res, '/', query); })
+                return renderIndex(req, res,
+                    (query) => { app.render(req, res, '/', query); },
+                    (err) => { app.render(req, res, '/_error', err); })
             })
             .post((req, res) => {
-                return indexRender(req, res,
-                    (query) => { res.json(query); })
+                return renderIndex(req, res,
+                    (query) => { res.json(query); },
+                    (err) => { app.render(req, res, '/_error', err); })
             });
 
         server.use('/*\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)$', (req, res) => {
