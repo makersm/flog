@@ -33,7 +33,7 @@ function renderPage(res, ...datas) {
     });
 }
 
-async function renderCategory(req, res, resolve) {
+async function renderCategory(req, res, resolve, reject) {
     let param = req.originalUrl.split(/^\/category/)[1];
     param = decodeURIComponent(param);
     let basePath = getBasePath();
@@ -60,7 +60,7 @@ async function renderCategory(req, res, resolve) {
     return render;
 }
 
-async function renderPost(req, res, resolve) {
+async function renderPost(req, res, resolve, reject) {
     let param = req.originalUrl.split(/^\/post/)[1];
     param = decodeURIComponent(param);
     let basePath = getBasePath();
