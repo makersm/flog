@@ -14,7 +14,10 @@ class CustomDocument extends Document {
             <Head>
                 <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css'/>
                 <link rel="stylesheet" href="/static/github-markdown.css"/>
+                <link rel="icon" href="/static/favicon.ico"/>
+
                 <link href="https://fonts.googleapis.com/css?family=Kalam" rel="stylesheet"/>
+                <title>Flog</title>
 
                 <style>{`
                         .markdown-body {

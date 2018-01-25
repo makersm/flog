@@ -5,13 +5,5 @@ module.exports = {
             fs: 'empty',
         }
         return config
-    },
-
-    // exportPathMap: function () {
-    //     return {
-    //         '/': {page: `/index`},                              // Routes
-    //         '/category': {page: `/category`},           // match
-    //         '/post': {page: `/post`},  // by
-    //     }
-    // }
+    }
 }
