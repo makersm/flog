@@ -48,12 +48,11 @@ Post.getInitialProps = async function (context) {
             return {statusCode: context.query.err.code, errorMsg: context.query.err.message};
         return context.query;
     } else {
-        const config = {headers: {'http-x-requested-with': 'axios'}};
         const pathName = context.pathname;
         const id = context.query.path;
 
         console.log(pathName, id);
-        const responseData = await axios.get(`${pathName}${id}`, config)
+        const responseData = await axios.post(`${pathName}${id}`)
             .then((response) => {
                 return response.data;
             })

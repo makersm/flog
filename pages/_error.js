@@ -22,7 +22,7 @@ class Error extends React.Component {
                 return `An ${statusCode} error occured on server`;
         } else {
             if(errorMsg)
-                return `'${errorMsg}' error occured on client`;
+                return `"${errorMsg}" error occured on client`;
             else
                 return `An error occured on client`;
         }

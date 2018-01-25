@@ -43,9 +43,7 @@ Index.getInitialProps = async function (context) {
             return {statusCode: context.query.err.code, errorMsg: context.query.err.message};
         return context.query;
     } else {
-        const config = {headers: {'http-x-requested-with': 'axios'}};
-
-        const responseData = await axios.get('', config)
+        const responseData = await axios.post('')
             .then((response) => {
                 return response.data;
             })

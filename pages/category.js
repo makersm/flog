@@ -18,42 +18,7 @@ class Category extends Component {
 
     constructor(props) {
         super(props);
-        console.log('constructor');
     }
-
-    // TODO make tmp log
-    componentDidMount() {
-        console.log('didMount');
-        if(this.props['clientSide-rendering']) {
-            console.log('wefe');
-        }
-    }
-    //
-    // componentWillMount() {
-    //     console.log('willmount');
-    // }
-    //
-    // componentWillUnmount() {
-    //     console.log('willUnmount');
-    //     if(this.props['clientSide-rendering']) {
-    //         // Router.replace(this.props['href']);
-    //         console.log('hellworold');
-    //     }
-    // }
-    //
-    // componentWillReceiveProps(nextProps){
-    //     console.log("componentWillReceiveProps: " + JSON.stringify(nextProps));
-    //     if(this.props['clientSide-rendering']) {
-    //     }
-    // }
-    //
-    //
-    // componentDidUpdate(prevProps, prevState){
-    //     console.log("componentDidUpdate: " + JSON.stringify(prevProps) + " " + JSON.stringify(prevState));
-    //     if(this.props['clientSide-rendering']) {
-    //         console.log('wefe');
-    //     }
-    // }
 
     render() {
         const {dirJsonTree, postsInfo, statusCode, errorMsg} = this.props;
@@ -74,14 +39,11 @@ function verify(query) {
 }
 
 Category.getInitialProps = async function (context) {
-    console.log('getInitialProps');
     if (verify(context.query)) {
         if (context.query.err)
             return {statusCode: context.query.err.code, errorMsg: context.query.err.message};
-        console.log(context.req.headers);
         return context.query;
     } else {
-        // const config = {headers: {'X-Requested-With': 'axios'}};
         const pathName = context.pathname;
         let id = context.query.path;
         if (!id)
