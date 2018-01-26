@@ -3,6 +3,7 @@
 `flog` is an abbreviation for` File bLOG`, and it is a form of blog that manages all posts as files.
 All pages in `flog` are based on server side rendering.
 post is automatically rendered when you create it based on `markdown`.
+you can visit the demo site, [Flog](https://flog.phople.us)
 
 ### Technology used
 
