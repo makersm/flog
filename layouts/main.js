@@ -1,6 +1,5 @@
-import {Header, CategoryTab} from '../components';
+import {CategoryTab, Header} from '../components';
 import React from 'react';
-import Router from "next/router";
 
 export default class main extends React.Component {
 
