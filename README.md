@@ -44,7 +44,7 @@ Type text based on markdown in `root`, then it will be automatically rendered.
 
 (Supported items are the same as `Note 2. markdown-it plugin list`.)
 - If directory is added to `root`, it is regarded as category classification. By default, `all` category exists and all files in the `root` directory of that post are displayed.
-- If you want a picture to the post by custom, save it same directory, and using `[Alt='image-name'](IMAGENAME.PREFIX)`
+- If you want a picture to the post by custom, save it same directory, and using `![Alt='image-name'](IMAGENAME.PREFIX)`
 
 > **Note 2. markdown-it plugin list**
 >
