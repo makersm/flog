@@ -5,7 +5,7 @@ const InlineStyle = () => (
     <style>{`
 		.Category {
             float: left;
-            width: 30rem;
+            width: 20vw;
             display: inline-block;
             padding:3rem 1rem 0 1rem;
             background-color: #b3b3cc;
