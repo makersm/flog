@@ -11,6 +11,7 @@ import PostNameList from './category_main/PostNameList';
 import PostName from './category_main/PostName';
 import ContentsHeaderList from './post_main/ContentsHeaderList';
 import ContentsHeader from './post_main/ContentsHeader';
+import Profile from './category_tab/Profile.js';
 
 export {
     Header,
@@ -25,5 +26,6 @@ export {
     PostNameList,
     PostName,
     ContentsHeaderList,
-    ContentsHeader
+    ContentsHeader,
+	Profile,
 }

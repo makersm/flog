@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {Input, Icon} from 'semantic-ui-react';
+import styled from 'styled-components'
 
 const InlineStyle = () => (
     <style>{`
 		.SearchBar {
-            margin-bottom: 10px
+            margin-bottom: 10px;
 		}
 	`}</style>
 );
@@ -19,6 +20,12 @@ class SearchBar extends Component {
     }
 
     render() {
+//		const Input = styled.Input`
+//			&&& {
+//				background-color: #033f5a;
+//			}
+//		`;
+
         return (
             <div className="SearchBar">
                 <InlineStyle/>

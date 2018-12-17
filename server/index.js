@@ -9,7 +9,7 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({dev});
 const handle = app.getRequestHandler();
 
-const imgReg = new RegExp(/\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)$/);
+const imgReg = new RegExp(/(png|PNG|jpg|JPG|jpeg|JPEG|gif|GIF|pdf|PDF|raw|RAW|svg|SVG|bmp|BMP)/);
 
 
 app.prepare()
@@ -24,6 +24,22 @@ app.prepare()
             return handle(req, res);
         });
 
+        server.use(/^(?!.*?\/static)^.*\.(png|PNG|jpg|JPG|jpeg|JPEG|gif|GIF|pdf|PDF|raw|RAW|svg|SVG|bmp|BMP)$/, (req, res) => {
+            let basePath = getBasePath();
+            let name = decodeURIComponent(req.originalUrl);
+			console.log(name);
+            let postFix = imgReg.exec(name)[1];
+            res.set('Content-Type', `image/${postFix}`);
+
+			let imgPath = '';
+			if(name.includes('/post'))
+				imgPath = name.split('/post')[1]; //### post 디렉토리
+			else
+				imgPath = name.split('/')[1]; //### 최상위 디렉토리
+			if(!imgPath) imgPath = '/post'.name.split('/post')[2]; //### base directory's name === 'post'
+            res.sendFile(path.join(basePath, imgPath));
+        });
+
         server.route('/category*')
             .get((req, res) => {
                 return renderCategory(req, res,
@@ -36,7 +52,7 @@ app.prepare()
                     (err) => { app.render(req, res, '/_error', err); });
             });
 
-        server.route('/post*')
+        server.route(/\/post(.(?!\.(png|PNG|jpg|JPG|jpeg|JPEG|gif|GIF|pdf|PDF|raw|RAW|svg|SVG|bmp|BMP)$))*$/)
             .get((req, res) => {
                 return renderPost(req, res,
                     (query) => { app.render(req, res, '/post', query); },
@@ -59,14 +75,6 @@ app.prepare()
                     (query) => { res.json(query); },
                     (err) => { app.render(req, res, '/_error', err); })
             });
-
-        server.use('/*\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)$', (req, res) => {
-            let basePath = getBasePath();
-            let name = decodeURIComponent(req.originalUrl);
-            let postFix = imgReg.exec(name)[1];
-            res.set('Content-Type', `image/${postFix}`);
-            res.sendFile(path.join(basePath, name));
-        });
 
         server.get('*', (req, res) => {
             return app.render(req, res, '/_error', req.query);

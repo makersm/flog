@@ -12,7 +12,6 @@ export default class main extends React.Component {
 
         return (
             <div>
-                <Header name="MAKER BLOG TEMPLATE"/>
                 <CategoryTab dirJsonTree={dirJsonTree}/>
                 {children}
             </div>

@@ -34,7 +34,6 @@ class Error extends React.Component {
         return (
             <div>
                 <InlineStyle/>
-                <Header name="MAKER BLOG TEMPLATE"/>
                 <div className="display-center">
                     <Icon name="exclamation"/>
                     <h1>{message}</h1>

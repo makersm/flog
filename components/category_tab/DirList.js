@@ -9,7 +9,7 @@ const propTypes = {
 
 const defaultProps = {
     dirJsonTree: [],
-    dirPath: ''
+    dirPath: '',
 };
 
 

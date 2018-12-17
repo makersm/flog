@@ -8,7 +8,11 @@ const InlineStyle = () => (
             margin: 5px;
             clear: both;
             cursor: pointer;
+			color: #1185cf;
         }
+		.dir {
+			color: lightgray;
+		}
 		.count {
 			color: gray;
 		}
@@ -31,7 +35,7 @@ class Dir extends Component {
                 <InlineStyle/>
                 <Link href={{pathname: '/category', query: {path: id}}} as={`/category${id}`}>
                     <li>
-                        <a>
+                        <a className="dir">
                             {name} <span className="count">[{count}]</span>
                         </a>
                     </li>

@@ -54,6 +54,7 @@ function renderPost(req, res, resolve, reject) {
     let param = req.originalUrl.split(/^\/post/)[1];
     let basePath = getBasePath();
 
+	param = decodeURIComponent(param);
     if (imgReg.test(param)) {
         let postFix = imgReg.exec(param)[1];
         res.set('Content-Type', `image/${postFix}`);

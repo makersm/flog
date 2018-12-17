@@ -8,7 +8,7 @@ import Error from './_error'
 const InlineStyle = () => (
     <style>{`
 		body {
-			background: #E0E0E0;
+			font-family: 'Open Sans, sans-serif';
 		}
 	`}</style>
 );

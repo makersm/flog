@@ -25,7 +25,7 @@ const CONFIG_DIR = [
     'config'
 ];
 
-const imgReg = new RegExp(/\.(png|jpg|jpeg|gif|pdf|raw|svg|bmp)$/);
+const imgReg = new RegExp(/\.(png|PNG|jpg|JPG|jpeg|JPEG|gif|GIF|pdf|PDF|raw|RAW|svg|SVG|bmp|BMP)$/);
 
 //######################################################################################################################
 //##

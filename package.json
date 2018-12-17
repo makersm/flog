@@ -33,7 +33,8 @@
     "react-dom": "^16.2.0",
     "react-markdown": "^3.1.4",
     "semantic-ui-css": "^2.2.12",
-    "semantic-ui-react": "^0.77.2"
+    "semantic-ui-react": "^0.77.2",
+    "styled-components": "^4.1.3"
   },
   "license": "ISC",
   "devDependencies": {
