@@ -6,8 +6,6 @@ All pages in `flog` are based on server side rendering.
 
 Post is automatically rendered when you create it based on `markdown`.
 
-If you want to see the demo-site, visit [flog](https://flog.phople.us)
-
 ## Technology used
 
  - nextjs
